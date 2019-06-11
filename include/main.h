@@ -7,10 +7,10 @@
 #include "program_custom_lamp.h"
 #include "utility_functions.h"
 #include "program_blink.h"
-#include "program_cycle.h"
 #include "osc.h"
 #include "theater_chase.h"
 #include "scanner.h"
+#include "program_preprogram.h"
 
 extern CRGBPalette16 blink_palette_purple;
 extern CRGBPalette16 blink_palette_orange;
@@ -32,7 +32,7 @@ extern int led_array [NUM_LEDS_PER_STRIP*NUM_STRIPS];
 
 
 // ----- DECLEARING VARIABLES ----- //
-enum program { NONE, CUSTOM_LAMP, BLINK, CYCLE, THEATER_CHASE, SCANNER};
+enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM};
 enum direction { FORWARD, REVERSE};
 enum display_mode { CONTINOUS_STRIP, SAME_ON_ALL_STRIPS };
 extern bool debug;

@@ -17,9 +17,6 @@ void updateLEDs()
         case BLINK:
           blinkUpdate();
           break;
-        case CYCLE:
-          cycleUpdate();
-          break;
         case THEATER_CHASE:
           theaterChaseUpdate();
           break;
@@ -138,15 +135,6 @@ void changeLEDProgram(OSCMessage &msg, int addrOffset )
     if (debug) {
       Serial.println("Activated the program Blink");
     }
-  }
-
-  if(msg.fullMatch("/Program/cycle"))
-  {
-    cycle();
-    if (debug) {
-      Serial.println("Activated the program Cycle");
-    }
-
   }
 
   if(msg.fullMatch("/Program/theaterchase"))
