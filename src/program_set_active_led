@@ -1,0 +1,30 @@
+void setActiveLED() {
+  while (Serial.available())
+  {
+    Serial.println("Reading serial");
+    char c = Serial.read();  //gets one byte from serial buffer
+    readString += c; //makes the string readString
+    delay(2);  //slow looping to allow buffer to fill with next character
+  }
+
+  if (readString.length() >0)
+  {
+    Serial.println(readString);  //so you can see the captured string
+    int n = readString.toInt();  //convert readString into a number
+    Serial.print("Lyser opp LED nr: ");
+    Serial.println(n);
+
+    for (int i = 0; i < NUM_LEDS_PER_STRIP * NUM_STRIPS; i++)
+    {
+      if (i == n) {
+        leds[i] = CRGB::White;
+      }
+      else {
+        leds[i] = CRGB::Black;
+      }
+    }
+    FastLED.show();
+  }
+
+  readString=""; //empty for next input
+}
