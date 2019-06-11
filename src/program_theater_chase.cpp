@@ -1,4 +1,4 @@
-#include "theater_chase.h"
+#include "program_theater_chase.h"
 
 chase_mode c_mode;
 uint8_t pixel_width;

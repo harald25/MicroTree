@@ -60,9 +60,6 @@ void setValue1(uint8_t value) {
 void setSaturation1(uint8_t saturation) {
   saturation1 = saturation;
 }
-void setSlope(float s) {
-  slope = s;
-}
 
 void setInterval(uint8_t i) {
   interval = i;
@@ -157,22 +154,6 @@ void changeLEDProgram(OSCMessage &msg, int addrOffset )
 
 void changeValue(OSCMessage &msg, int addrOffset )
 {
-
-  if (msg.fullMatch("/Variable/delta"))
-  {
-    float value = msg.getFloat(0);
-    delta = (int)value;
-    update = true;
-  }
-
-  if (msg.fullMatch("/Variable/slope"))
-  {
-    float value = msg.getFloat(0);
-    Serial.println(value);
-    setSlope(value);
-    update = true;
-  }
-
   if (msg.fullMatch("/Variable/interval"))
   {
     float value = msg.getFloat(0);

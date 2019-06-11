@@ -1,4 +1,4 @@
-#include "scanner.h"
+#include "program_scanner.h"
 
 uint8_t tail_length;
 

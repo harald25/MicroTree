@@ -8,8 +8,8 @@
 #include "utility_functions.h"
 #include "program_blink.h"
 #include "osc.h"
-#include "theater_chase.h"
-#include "scanner.h"
+#include "program_theater_chase.h"
+#include "program_scanner.h"
 #include "program_preprogram.h"
 
 extern CRGBPalette16 blink_palette_purple;
@@ -55,7 +55,5 @@ extern uint8_t value2;
 extern uint8_t hue2;
 extern bool update;
 extern char osc_message_address[18];
-extern float delta;
-extern float slope;
 
 #endif
