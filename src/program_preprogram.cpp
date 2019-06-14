@@ -4,11 +4,22 @@
 #include "program_scanner.h"
 #include "program_theater_chase.h"
 
+program active_preprogram;
 int last_preprogram_change;
-int preprogram_length;
+int16_t preprogram_length; //The default value if nothing else is passed to SettingsObject
 uint8_t preprogram_index;
-uint8_t number_of_preprograms;
 bool preprogram_just_changed;
+SettingsObject settings_program1(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,BLINK);
+SettingsObject settings_program2(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,BLINK);
+SettingsObject settings_program3(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,BLINK);
+SettingsObject settings_program4(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,BLINK);
+SettingsObject settings_program5(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,BLINK);
+SettingsObject settings_program6(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,BLINK);
+SettingsObject settings_program7(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,BLINK);
+SettingsObject settings_program8(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,BLINK);
+SettingsObject settings_array[8] = {settings_program1,settings_program2,settings_program3,settings_program4,settings_program5,settings_program6,settings_program7,settings_program8};
+const uint8_t number_of_preprograms = 8; //This number must equal the length of $settings_array
+
 
 void preprogram()
 {
@@ -16,13 +27,13 @@ void preprogram()
   last_preprogram_change = 0;
   preprogram_length = 10 * 1000; //10 seconds
   preprogram_index = 0;
-  number_of_preprograms = 8;
   preprogram_just_changed = 1;
+  active_preprogram = settings_array[preprogram_index].getActivePreprogram();
 }
 
 void preprogramUpdate()
 {
-  if ( (millis() - last_preprogram_change) > preprogram_length)
+  if ((millis() - last_preprogram_change) > preprogram_length)
   {
     preprogram_index ++;
     if (preprogram_index >= number_of_preprograms) {
@@ -32,41 +43,114 @@ void preprogramUpdate()
 
   if (preprogram_just_changed)
   {
-    //Run the function to initialize current preprogram
+    //Run the functions to initialize current preprogram
+    switch (active_preprogram)
+    {
+      case NONE:
+        break;
+      case BLINK:
+        blink();
+        break;
+      case THEATER_CHASE:
+        theaterChase();
+        break;
+      case SCANNER:
+        scanner();
+        break;
+      default:
+        break;
+      }
+      settings_array[preprogram_index].setGlobalSettings();
+      preprogram_length = settings_array[preprogram_index].getPreprogramLength();
+      active_preprogram = settings_array[preprogram_index].getActivePreprogram();
+
   }
   // Run funtion to start updating the LEDs with currently active preprogram
+  switch (active_preprogram)
+  {
+    case NONE:
+      break;
+    case BLINK:
+      blink();
+      break;
+    case THEATER_CHASE:
+      theaterChase();
+      break;
+    case SCANNER:
+      scanner();
+      break;
+    default:
+      break;
+  }
 
 }
 
-class SettingsObject
+SettingsObject::SettingsObject(int16_t s_interval, int16_t s_inc_by1, int16_t s_inc_by2, int16_t s_sat1, int16_t s_sat2, int16_t s_val1, int16_t s_val2, int16_t s_hue1, int16_t s_hue2, int16_t s_prep_length, program s_active_preprog)
 {
-  int setting_interval;
-  int setting_increment_by1;
-  int setting_increment_by2;
-  int16_t setting_saturation1;
-  int16_t setting_value1;
-  int16_t setting_hue1;
-  int16_t setting_saturation2;
-  int16_t setting_value2;
-  int16_t setting_hue2;
+  setting_interval = s_interval;
+  setting_increment_by1 = s_inc_by1;
+  setting_increment_by2 = s_inc_by2;
+  setting_saturation1 = s_sat1;
+  setting_value1 = s_val1;
+  setting_hue1 = s_hue1;
+  setting_saturation2 = s_sat2;
+  setting_value2 = s_val2;
+  setting_hue2 = s_hue2;
+  setting_preprogram_length = s_prep_length;
+  setting_active_preprogram =s_active_preprog;
+}
 
 
-  public:
-    SettingsObject(int si, int sib1, int sib2, int16_t ss1, int16_t ss2, int16_t sv1, int16_t sv2, int16_t sh1, int16_t sh2)
-    {
-      setting_interval = si;
-      setting_increment_by1 = sib1;
-      setting_increment_by2 = sib2;
-      setting_saturation1 = ss1;
-      setting_saturation2 = ss2;
-      setting_value1 = sv1;
-      setting_value2 = sv2;
-      setting_hue1 = sh1;
-      setting_hue2 = sh2;
-    }
+//Update all the class variables with the corresponding global variables
+void SettingsObject::getGlobalSettings()
+{
+  setting_interval = interval;
+  setting_increment_by1 = increment_by1;
+  setting_increment_by2 = increment_by2;
+  setting_saturation1 = saturation1;
+  setting_saturation2 = saturation2;
+  setting_value1 = value1;
+  setting_value2 = value2;
+  setting_hue1 = hue1;
+  setting_hue2 = hue2;
+}
 
-    //Need to make functions to change all class variables
+//Update all the global variables with the ones given to the settings object
+void SettingsObject::setGlobalSettings()
+{
+  if(setting_interval != -1) {
+    interval = setting_interval;
+  }
+  if(increment_by1 != -1) {
+    increment_by1 = setting_increment_by1;
+  }
+  if(increment_by2 != -1) {
+    increment_by2 = setting_increment_by2;
+  }
+  if(setting_saturation1 != -1) {
+    saturation1 = setting_saturation1;
+  }
+  if(setting_saturation2 != -1) {
+    saturation2 = setting_saturation2;
+  }
+  if(setting_value1 != -1) {
+    value1 = setting_value1;
+  }
+  if(setting_value2 != -1) {
+    value2 = setting_value2;
+  }
+  if(setting_hue1 != -1) {
+    hue1 = setting_hue1;
+  }
+  if(setting_hue2 != -1) {
+    hue2 = setting_hue2;
+  }
+}
 
-    //Need to make function to update all global variables with 
+int16_t SettingsObject::getPreprogramLength() {
+  return setting_preprogram_length;
+}
 
-};
+program SettingsObject::getActivePreprogram() {
+  return setting_active_preprogram;
+}
