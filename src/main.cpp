@@ -87,7 +87,7 @@ void setup() {
 
 
   ledArrayMaker();
-  blink();
+  preprogram();
 }
 
 void loop() {

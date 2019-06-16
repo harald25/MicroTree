@@ -23,6 +23,9 @@ void updateLEDs()
         case SCANNER:
           scannerUpdate();
           break;
+        case PREPROGRAM:
+          preprogramUpdate();
+          break;
         default:
           break;
       }

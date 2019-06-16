@@ -67,19 +67,32 @@ void preprogramUpdate()
   // Run funtion to start updating the LEDs with currently active preprogram
   switch (active_preprogram)
   {
-    case NONE:
-      break;
-    case BLINK:
-      blink();
-      break;
-    case THEATER_CHASE:
-      theaterChase();
-      break;
-    case SCANNER:
-      scanner();
-      break;
-    default:
-      break;
+    if(update)
+    {
+      if ((millis() - last_update) > interval) // time to update
+      {
+        last_update = millis();
+        switch (active_preprogram)
+        {
+          case NONE:
+            break;
+          case CUSTOM_LAMP:
+            customLampUpdate();
+            break;
+          case BLINK:
+            blinkUpdate();
+            break;
+          case THEATER_CHASE:
+            theaterChaseUpdate();
+            break;
+          case SCANNER:
+            scannerUpdate();
+            break;
+          default:
+            break;
+        }
+      }
+    }
   }
 
 }
