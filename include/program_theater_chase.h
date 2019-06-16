@@ -1,5 +1,5 @@
-#ifndef __THEATERCHASE_H_INCLUDE_
-#define __THEATERCHASE_H_INCLUDE_
+#ifndef __THEATERCHASE_H_INCLUDED_
+#define __THEATERCHASE_H_INCLUDED_
 #include "main.h"
 
 enum chase_mode { REGULAR, RAINBOW_CHASE};

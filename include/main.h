@@ -1,6 +1,11 @@
 #ifndef __MAIN_H_INCLUDED_
 #define __MAIN_H_INCLUDED_
 
+// ----- ENUMERATIONS ----- //
+enum direction { FORWARD, REVERSE};
+enum display_mode { CONTINOUS_STRIP, SAME_ON_ALL_STRIPS };
+enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM};
+
 #define USE_OCTOWS2811
 #include<OctoWS2811.h>
 #include<FastLED.h>
@@ -32,9 +37,6 @@ extern int led_array [NUM_LEDS_PER_STRIP*NUM_STRIPS];
 
 
 // ----- DECLEARING VARIABLES ----- //
-enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM};
-enum direction { FORWARD, REVERSE};
-enum display_mode { CONTINOUS_STRIP, SAME_ON_ALL_STRIPS };
 extern bool debug;
 extern display_mode displaymode;
 extern direction dir;

@@ -1,5 +1,5 @@
-#ifndef __CUSTOMLAMP_H_INCLUDE_
-#define __CUSTOMLAMP_H_INCLUDE_
+#ifndef __CUSTOMLAMP_H_INCLUDED_
+#define __CUSTOMLAMP_H_INCLUDED_
 
 #include<OctoWS2811.h>
 #include<FastLED.h>

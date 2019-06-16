@@ -5,7 +5,6 @@
 
 void preprogram();
 void preprogramUpdate();
-extern program active_preprogram;
 
 class SettingsObject
 {
