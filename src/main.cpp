@@ -10,7 +10,7 @@ display_mode displaymode;
 direction dir;
 program active_program;
 int interval;
-int last_update;
+int last_update = 0;
 int program_index1;
 int program_index2;
 int increment_by1;
@@ -77,9 +77,13 @@ void ledArrayMaker()
 }
 
 void setup() {
+  delay(5000);
   Serial.begin(9600);         //Teensy <=> Computer
   SLIPSerial.begin(115200);   //Teensy <=> ESP
   Serial.println("Started");
+  if(debug) {
+    Serial.println("Debugging is activated");
+  }
 
   FastLED.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
   FastLED.setCorrection(COLOR_CORRECTION);
