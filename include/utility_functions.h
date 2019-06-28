@@ -4,6 +4,11 @@
 #include "osc.h"
 #include "main.h"
 
+
+enum audio_reactive_setting { HUE1, HUE2, SAT1, SAT2, VAL1, VAL2};
+extern bool react_to_audio;
+extern float thresholdVertical[];
+
 void updateLEDs();
 void incrementIndex(int *program_index1, uint16_t *total_steps1, int *increment_by1);
 
@@ -24,5 +29,7 @@ void setBlinkRandomTime(uint32_t x);
 void allLedsOff();
 void allLedsOn();
 void setColorPreset(uint8_t color_preset);
+void audioReact(audio_reactive_setting setting);
+extern void computeVerticalLevels();
 
 #endif

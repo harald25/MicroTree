@@ -66,6 +66,7 @@ void customLamp()
     if(((x % 5) == 1) || ((x % 5) == 2)) {
       lamps[x][0] = 1;
     }
+    react_to_audio = false;
   }
 
   updateCustomLampState();

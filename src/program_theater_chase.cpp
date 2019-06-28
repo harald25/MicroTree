@@ -22,11 +22,13 @@ void theaterChase()
   pixel_width = 1;
   update = true;
   increment_by1 = 1;
+  react_to_audio = true;
 }
 
 
 void theaterChaseUpdate()
 {
+  audioReact(HUE2);
   if (c_mode == RAINBOW_CHASE)
   {
     uint8_t tail = 0;

@@ -32,6 +32,7 @@ void preprogram()
   preprogram_first_run = 1;
   update = 1;
   active_program = PREPROGRAM;
+  react_to_audio = true;
 }
 
 void preprogramUpdate()

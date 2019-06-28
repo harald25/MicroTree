@@ -16,6 +16,7 @@ enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM};
 #include "program_theater_chase.h"
 #include "program_scanner.h"
 #include "program_preprogram.h"
+#include <Audio.h>
 
 extern CRGBPalette16 blink_palette_purple;
 extern CRGBPalette16 blink_palette_orange;

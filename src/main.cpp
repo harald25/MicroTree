@@ -58,9 +58,7 @@ DEFINE_GRADIENT_PALETTE( heatmap_gp ) {
 CRGBPalette16 blink_palette_purple = blink_purple_gp;
 CRGBPalette16 blink_palette_orange = blink_orange_gp;
 CRGBPalette16 blink_palette_bluetones = blink_bluetones_gp;
-
 CRGBPalette16 heatcolorPalette = heatmap_gp;
-
 
 
 void ledArrayMaker()
@@ -85,13 +83,16 @@ void setup() {
     Serial.println("Debugging is activated");
   }
 
+  //For sound reactivity
+  AudioMemory(12);
+  computeVerticalLevels();
+
   FastLED.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
   FastLED.setCorrection(COLOR_CORRECTION);
   FastLED.setBrightness(GLOBAL_BRIGHTNESS);
 
-
   ledArrayMaker();
-  preprogram();
+  theaterChase();
 }
 
 void loop() {
