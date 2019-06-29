@@ -13,10 +13,6 @@ AudioConnection          patchCord2(biquad1, fft);
 
 audio_reactive_setting reactive_setting = VAL2;
 const unsigned int audio_rective_setting_max_value = 255;
-// These parameters adjust the vertical thresholds
-const float maxLevel = 0.5;      // 1.0 = max, lower is more "sensitive"
-const float dynamicRange = 60.0; // total range to display, in decibels
-const float linearBlend = 0.1;   // useful range is 0 to 0.7
 // This array holds the volume level (0 to 1.0) for each
 // vertical pixel to turn on.  Computed in setup() using
 // the 3 parameters above.
@@ -49,6 +45,7 @@ void audioReact(audio_reactive_setting setting)
         fft_stop = fft_start;
       }
       level = fft.read(fft_start,fft_stop);
+      Serial.println(level);
 
       if((level-level_old) > 0.0)
       {
@@ -85,20 +82,6 @@ void audioReact(audio_reactive_setting setting)
           break;
       }
     }
-  }
-}
-
-void computeVerticalLevels() {
-  unsigned int y;
-  float n, logLevel, linearLevel;
-
-  for (y=0; y < audio_rective_setting_max_value; y++) {
-    n = (float)y / (float)(audio_rective_setting_max_value - 1);
-    logLevel = pow10f(n * -1.0 * (dynamicRange / 20.0));
-    linearLevel = 1.0 - n;
-    linearLevel = linearLevel * linearBlend;
-    logLevel = logLevel * (1.0 - linearBlend);
-    thresholdVertical[y] = (logLevel + linearLevel) * maxLevel;
   }
 }
 
