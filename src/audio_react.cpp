@@ -3,11 +3,6 @@
 // If set to true, messages will be output to serial console
 const bool debug_audioreact = 1;
 
-// Audio library objects
-// AudioInputAnalog         adc1(A3);
-// AudioAnalyzeFFT1024      fft;
-// AudioConnection          patchCord1(adc1, fft);
-
 // GUItool: begin automatically generated code
 AudioInputAnalog         adc1(A3);
 AudioFilterBiquad        biquad1;
@@ -16,7 +11,7 @@ AudioConnection          patchCord1(adc1, biquad1);
 AudioConnection          patchCord2(biquad1, fft);
 // GUItool: end automatically generated code
 
-
+audio_reactive_setting reactive_setting = VAL2;
 const unsigned int audio_rective_setting_max_value = 255;
 // These parameters adjust the vertical thresholds
 const float maxLevel = 0.5;      // 1.0 = max, lower is more "sensitive"
@@ -28,15 +23,16 @@ const float linearBlend = 0.1;   // useful range is 0 to 0.7
 float thresholdVertical[audio_rective_setting_max_value];
 float level_old;
 float smoothing_coeff_positive = 1.0; // experiment with different coefficients; --> 0.0 < smoothing_coeff < 1.0
-float smoothing_coeff_negative = 1.0;
+float smoothing_coeff_negative = 0.5;
 
 //Setting some start values for the sound reactivity. These are later supposed
 //to be manipulated with TouchOSC
 bool react_to_audio = 0;
+uint16_t fft_start = 1;
 uint16_t fft_stop = 3;
-uint16_t fft_start = 3;
 float bandpass_freq = 130.0;
-float bandpass_width = 0.1;
+float bandpass_width = 0.5;
+uint8_t amplification = 10;
 
 
 
@@ -49,7 +45,7 @@ void audioReact(audio_reactive_setting setting)
     if (fft.available())
     {
       //In casee the user sets stop higher than start via TouchOSC
-      if(fft_stop > fft_start) {
+      if(fft_stop < fft_start) {
         fft_stop = fft_start;
       }
       level = fft.read(fft_start,fft_stop);
@@ -63,7 +59,31 @@ void audioReact(audio_reactive_setting setting)
         level = smoothing_coeff_negative * level + (1.0 - smoothing_coeff_negative) * level_old;
       }
       level_old = level;
-      value2 = (level * audio_rective_setting_max_value) * 10;
+      level = (level * audio_rective_setting_max_value) * amplification;
+
+      switch (setting)
+      {
+        case HUE1:
+          hue1 = level;
+          break;
+        case HUE2:
+          hue2 = level;
+          break;
+        case SAT1:
+          saturation1 = level;
+          break;
+        case SAT2:
+          saturation2 = level;
+          break;
+        case VAL1:
+          value1 = level;
+          break;
+        case VAL2:
+          value2 = level;
+          break;
+        default:
+          break;
+      }
     }
   }
 }
@@ -85,10 +105,24 @@ void computeVerticalLevels() {
 void sendValuesToTouchosc()
 {
   OSCMsgSend("/react/toggle", (float)react_to_audio);
+
   OSCMsgSend("/fft/start/value", (float)fft_start);
+  OSCMsgSend("/react/fft/start", (float)fft_start);
+
   OSCMsgSend("/fft/stop/value", (float)fft_stop);
+  OSCMsgSend("/react/fft/stop", (float)fft_stop);
+
   OSCMsgSend("/bandpass/freq/value", (float)bandpass_freq);
+  OSCMsgSend("/react/bandpass/freq", (float)bandpass_freq);
+
   OSCMsgSend("/bandpass/width/value", (float)bandpass_width);
+  OSCMsgSend("/react/bandpass/width", (float)bandpass_width);
+
+  OSCMsgSend("/react/smooth_pos/value", (float)smoothing_coeff_positive);
+  OSCMsgSend("/react/smooth_pos", (float)smoothing_coeff_positive);
+
+  OSCMsgSend("/react/smooth_neg/value", (float)smoothing_coeff_negative);
+  OSCMsgSend("/react/smooth_neg", (float)smoothing_coeff_negative);
 }
 
 void setAudioReact(bool react) {
@@ -162,6 +196,10 @@ void setSmoothNeg(float smooth_neg) {
   }
 }
 
+void setAudioReactiveSetting(uint8_t setting) {
+  reactive_setting = (audio_reactive_setting)setting;
+}
+
 void changeAudioReactSettings(OSCMessage &msg, int addrOffset)
 {
   if (msg.fullMatch("/react/toggle"))
@@ -177,7 +215,7 @@ void changeAudioReactSettings(OSCMessage &msg, int addrOffset)
   if (msg.fullMatch("/react/bandpass/width"))
   {
     float value = msg.getFloat(0);
-    setBandpassWidth((uint16_t)value);
+    setBandpassWidth(value);
   }
   if (msg.fullMatch("/react/fft/start"))
   {
@@ -198,5 +236,14 @@ void changeAudioReactSettings(OSCMessage &msg, int addrOffset)
   {
     float value = msg.getFloat(0);
     setSmoothNeg(value);
+  }
+  if (msg.fullMatch("/react/page"))
+  {
+    sendValuesToTouchosc();
+  }
+  if (msg.fullMatch("/react/reactive_setting"))
+  {
+    float value = msg.getFloat(0);
+    setAudioReactiveSetting((uint8_t)value);
   }
 }

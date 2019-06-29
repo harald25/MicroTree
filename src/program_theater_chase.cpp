@@ -28,7 +28,7 @@ void theaterChase()
 
 void theaterChaseUpdate()
 {
-  audioReact(HUE2);
+  audioReact((audio_reactive_setting)reactive_setting);
   if (c_mode == RAINBOW_CHASE)
   {
     uint8_t tail = 0;
