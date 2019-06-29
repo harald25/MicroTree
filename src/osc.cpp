@@ -26,7 +26,7 @@ void OSCMsgSend(float value)
 }
 
 //Takes both address, and value as arguments
-void OSCMsgSend(char address[18], float value)
+void OSCMsgSend(char * address, float value)
 {
   Serial.println(address);
   OSCMessage msgOUT(address);
@@ -77,8 +77,8 @@ void OSCMsgReceive()
     }
     msgIN.route("/Program",changeLEDProgram);
     msgIN.route("/Variable",changeValue);
-    msgIN.route("/Preset",changePreset);
     msgIN.route("/Colorpreset",changeColorPreset);
+    msgIN.route("/react", changeAudioReactSettings);
   }
 
 }

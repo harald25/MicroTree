@@ -9,14 +9,16 @@ enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM};
 #define USE_OCTOWS2811
 #include<OctoWS2811.h>
 #include<FastLED.h>
-#include "program_custom_lamp.h"
+#include <Audio.h>
+
 #include "utility_functions.h"
 #include "program_blink.h"
 #include "osc.h"
 #include "program_theater_chase.h"
 #include "program_scanner.h"
 #include "program_preprogram.h"
-#include <Audio.h>
+#include "audio_react.h"
+
 
 extern CRGBPalette16 blink_palette_purple;
 extern CRGBPalette16 blink_palette_orange;

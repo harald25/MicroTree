@@ -1,6 +1,5 @@
 #include "program_preprogram.h"
 #include "program_blink.h"
-#include "program_custom_lamp.h"
 #include "program_scanner.h"
 #include "program_theater_chase.h"
 

@@ -1,24 +1,5 @@
 #include "utility_functions.h"
 
-// Audio library objects
-AudioInputAnalog         adc1(A3);
-AudioAnalyzeFFT1024      fft;
-AudioConnection          patchCord1(adc1, fft);
-
-const unsigned int audio_rective_setting_max_value = 255;
-// These parameters adjust the vertical thresholds
-const float maxLevel = 0.5;      // 1.0 = max, lower is more "sensitive"
-const float dynamicRange = 20.0; // total range to display, in decibels
-const float linearBlend = 0.3;   // useful range is 0 to 0.7
-// This array holds the volume level (0 to 1.0) for each
-// vertical pixel to turn on.  Computed in setup() using
-// the 3 parameters above.
-float thresholdVertical[audio_rective_setting_max_value];
-float level_old;
-float smoothing_coeff_positive = 1.0; // experiment with different coefficients; --> 0.0 < smoothing_coeff < 1.0
-float smoothing_coeff_negative = 1.0;
-bool react_to_audio = 0;
-
 void updateLEDs()
 {
   if(update)
@@ -29,9 +10,6 @@ void updateLEDs()
       switch (active_program)
       {
         case NONE:
-          break;
-        case CUSTOM_LAMP:
-          customLampUpdate();
           break;
         case BLINK:
           blinkUpdate();
@@ -49,51 +27,6 @@ void updateLEDs()
           break;
       }
     }
-  }
-}
-
-void audioReact(audio_reactive_setting setting)
-{
-  if(react_to_audio)
-  {
-    float level;
-    if (fft.available())
-    {
-      level = fft.read(1, 10);
-
-      if((level-level_old) > 0.0)
-      {
-        level = smoothing_coeff_positive * level + (1.0 - smoothing_coeff_positive) * level_old;
-      }
-      else
-      {
-        level = smoothing_coeff_negative * level + (1.0 - smoothing_coeff_negative) * level_old;
-      }
-      level_old = level;
-
-      for(unsigned int x = 0; x < audio_rective_setting_max_value; x++)
-      {
-        if (level >= thresholdVertical[x])
-        {
-          value2 = x;
-          break;
-        }
-      }
-    }
-  }
-}
-
-void computeVerticalLevels() {
-  unsigned int y;
-  float n, logLevel, linearLevel;
-
-  for (y=0; y < audio_rective_setting_max_value; y++) {
-    n = (float)y / (float)(audio_rective_setting_max_value - 1);
-    logLevel = pow10f(n * -1.0 * (dynamicRange / 20.0));
-    linearLevel = 1.0 - n;
-    linearLevel = linearLevel * linearBlend;
-    logLevel = logLevel * (1.0 - linearBlend);
-    thresholdVertical[y] = (logLevel + linearLevel) * maxLevel;
   }
 }
 
@@ -141,24 +74,6 @@ void setActivePalette(int x) {
   active_palette = blink_palette_array[x];
 }
 
-void changePreset(OSCMessage &msg, int addrOffset )
-{
-  if (debug) {
-    Serial.println("Changing preset");
-  }
-
-  update = true;  //Times are a changin', we need to update
-
-  if(msg.fullMatch("/Preset/custom_lamp") && (active_program == CUSTOM_LAMP))
-  {
-    if (debug) {
-      Serial.println("CustomlampPreset");
-    }
-    uint8_t preset_number = (uint8_t)msg.getFloat(0);
-    setCustomlampPreset(preset_number);
-  }
-
-}
 
 void changeColorPreset(OSCMessage &msg, int addrOffset )
 {
@@ -182,15 +97,6 @@ void changeColorPreset(OSCMessage &msg, int addrOffset )
 void changeLEDProgram(OSCMessage &msg, int addrOffset )
 {
   update = true;
-
-  if(msg.fullMatch("/Program/custom_lamp"))
-  {
-    customLamp();
-    if (debug) {
-      Serial.println("Activated the program Custom Lamp");
-    }
-
-  }
 
   if(msg.fullMatch("/Program/blink"))
   {
@@ -264,14 +170,7 @@ void changeValue(OSCMessage &msg, int addrOffset )
     hue2 = hue;
     update = true;
   }
-
-  if (msg.match("/Variable/lamp"))
-  {
-    float lamp = msg.getFloat(0);
-    activateDeactivateLamp(uint8_t(lamp));
-    update = true;
-  }
-
+  
   if (msg.fullMatch("/Variable/color1"))
   {
     uint8_t x = (uint8_t)msg.getFloat(0);

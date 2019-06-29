@@ -85,7 +85,6 @@ void setup() {
 
   //For sound reactivity
   AudioMemory(12);
-  computeVerticalLevels();
 
   FastLED.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
   FastLED.setCorrection(COLOR_CORRECTION);
