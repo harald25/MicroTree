@@ -22,13 +22,13 @@ void theaterChase()
   pixel_width = 10;
   update = true;
   increment_by1 = 1;
-  react_to_audio = true;
+  // react_to_audio = true;
 }
 
 
 void theaterChaseUpdate()
 {
-  audioReact((audio_reactive_setting)reactive_setting);
+  // audioReact((audio_reactive_setting)reactive_setting);
   if (c_mode == RAINBOW_CHASE)
   {
     uint8_t tail = 0;
@@ -38,18 +38,18 @@ void theaterChaseUpdate()
     {
       if ((i + program_index1) % pixel_distance == 0)
       {
-        leds[led_array[i]] = CHSV((i*10)%255, saturation1, value1);
+        leds[i] = CHSV((i*10)%255, saturation1, value1);
         tail = pixel_width;
         last_middle = i;
       }
       else if (tail != 0)
       {
-       leds[led_array[i]] = CHSV((((i*10)-(pixel_width-(tail*3)+1)))%255, saturation1, value1);
+       leds[i] = CHSV((((i*10)-(pixel_width-(tail*3)+1)))%255, saturation1, value1);
        tail--;
       }
       else
       {
-        leds[led_array[i]] = CHSV(hue2, saturation2, value2);
+        leds[i] = CHSV(hue2, saturation2, value2);
       }
     }
   }
@@ -60,11 +60,11 @@ void theaterChaseUpdate()
     {
       if (((i + program_index1) % pixel_distance >= 0) && ((i + program_index1) % pixel_distance < pixel_width))
       {
-        leds[led_array[i]] = CHSV(hue1, saturation1, value1);
+        leds[i] = CHSV(hue1, saturation1, value1);
       }
       else
       {
-        leds[led_array[i]] = CHSV(hue2, saturation2, value2);
+        leds[i] = CHSV(hue2, saturation2, value2);
       }
     }
   }

@@ -4,7 +4,6 @@
 // If set to true, debug messages will be output to serial device
 bool debug = false;
 
-int led_array [NUM_LEDS_PER_STRIP*NUM_STRIPS];
 CRGB leds [NUM_LEDS_PER_STRIP*NUM_STRIPS];
 display_mode displaymode;
 direction dir;
@@ -55,24 +54,51 @@ DEFINE_GRADIENT_PALETTE( heatmap_gp ) {
 224,   255,255,  0,   //bright yellow
 255,   255,255,255 }; //full white
 
+
+DEFINE_GRADIENT_PALETTE( spectrum_classic_gp ) {
+0,   0,  255,  0,    //Green
+75, 255,  200,  0,  //Yellow
+115,   255,  0,  0,   //Red
+255,   255,  0,  0};    //Red
+
+DEFINE_GRADIENT_PALETTE( spectrum_warm_gp ) {
+0,      0,  0,  244,    //Blue
+109,    0,  0,  244,    //Blue
+110,   255,    0,  175,   //Lilla
+190,   255,    0,  175,   //Lilla
+191,   255,    0,  0,    //Red
+255,   255,    0,  0};    //Red
+
+DEFINE_GRADIENT_PALETTE( spectrum_pastel_gp ) {
+0,      0,  200,  245,    //Bright blue
+//25,      0,  200,  245,    //Bright blue
+25,    0,  255,  0,    //Pastel green
+150,    0,  255,  0,    //Pastel green
+200,   239, 255,  10,   //Yellow
+255,   255,   0,  0};    //Red
+
+DEFINE_GRADIENT_PALETTE( spectrum_candy_gp ) {
+0,   245,    50,  207,    //Pastel pink
+100,   245,    50,  207,    //Pastel pink
+125,   32,    255,  125,    //Pastel green
+175,   32,    255,  125,    //Pastel green
+200,   0,    162,  255,    //Pastel Blue
+255,   0,    162,  255};    //Pastel Blue
+
+CRGBPalette16 spectrum_candy = spectrum_candy_gp;
+CRGBPalette16 spectrum_pastel = spectrum_pastel_gp;
+CRGBPalette16 spectrum_warm = spectrum_warm_gp;
+CRGBPalette16 spectrum_classic = spectrum_classic_gp;
+
 CRGBPalette16 blink_palette_purple = blink_purple_gp;
 CRGBPalette16 blink_palette_orange = blink_orange_gp;
 CRGBPalette16 blink_palette_bluetones = blink_bluetones_gp;
 CRGBPalette16 heatcolorPalette = heatmap_gp;
 
+CRGBPalette16 * active_palette;
 
-void ledArrayMaker()
-{
-  int x = 0;
-  for (int i = NUM_STRIPS-1; i>-1; i--)
-  {
-    for (int j = 0; j < NUM_LEDS_PER_STRIP; j++)
-    {
-      led_array[x] = (i*NUM_LEDS_PER_STRIP)+j;
-      x++;
-    }
-  }
-}
+
+
 
 void setup() {
   delay(5000);
@@ -84,17 +110,17 @@ void setup() {
   }
 
   //For sound reactivity
-  AudioMemory(12);
+  AudioMemory(20);
 
   FastLED.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
   FastLED.setCorrection(COLOR_CORRECTION);
   FastLED.setBrightness(GLOBAL_BRIGHTNESS);
 
-  ledArrayMaker();
-  theaterChase();
+  vumeter();
 }
 
 void loop() {
     OSCMsgReceive();
     updateLEDs();
+    Serial.println("Looping");
 }

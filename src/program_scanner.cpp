@@ -22,7 +22,6 @@ void scanner()
   increment_by1 = 1;
   dir = FORWARD;
   update = true;
-  react_to_audio = false;
 }
 
 void scannerUpdate()
@@ -33,15 +32,15 @@ void scannerUpdate()
     {
       if (i == program_index1) // first half of the scan
       {
-         leds[led_array[i]] = CHSV(hue1, saturation1, value1);
+         leds[i] = CHSV(hue1, saturation1, value1);
       }
       else if (i == total_steps1 - program_index1) // The return trip.
       {
-        leds[led_array[i]] = CHSV(hue1, saturation1, value1);
+        leds[i] = CHSV(hue1, saturation1, value1);
       }
       else  // fade to black
       {
-        leds[led_array[i]].fadeToBlackBy( tail_length );
+        leds[i].fadeToBlackBy( tail_length );
       }
     }
   }
@@ -53,15 +52,15 @@ void scannerUpdate()
       {
         if (y == program_index1) // first half of the scan
         {
-           leds[led_array[y+(i*NUM_LEDS_PER_STRIP)]] = CHSV(hue1, saturation1, value1);
+           leds[y+(i*NUM_LEDS_PER_STRIP)] = CHSV(hue1, saturation1, value1);
         }
         else if (y == total_steps1 - program_index1) // The return trip.
         {
-          leds[led_array[y+(i*NUM_LEDS_PER_STRIP)]] = CHSV(hue1, saturation1, value1);
+          leds[y+(i*NUM_LEDS_PER_STRIP)] = CHSV(hue1, saturation1, value1);
         }
         else  // fade to black
         {
-          leds[led_array[y+(i*NUM_LEDS_PER_STRIP)]].fadeToBlackBy( tail_length );
+          leds[y+(i*NUM_LEDS_PER_STRIP)].fadeToBlackBy( tail_length );
         }
       }
     }

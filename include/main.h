@@ -4,7 +4,7 @@
 // ----- ENUMERATIONS ----- //
 enum direction { FORWARD, REVERSE};
 enum display_mode { CONTINOUS_STRIP, SAME_ON_ALL_STRIPS };
-enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM};
+enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM, VUMETER};
 
 #define USE_OCTOWS2811
 #include<OctoWS2811.h>
@@ -18,12 +18,19 @@ enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM};
 #include "program_scanner.h"
 #include "program_preprogram.h"
 #include "audio_react.h"
-
+#include "program_vumeter.h"
 
 extern CRGBPalette16 blink_palette_purple;
 extern CRGBPalette16 blink_palette_orange;
 extern CRGBPalette16 blink_palette_bluetones;
 extern CRGBPalette16 heatcolorPalette;
+extern CRGBPalette16 spectrum_candy;
+extern CRGBPalette16 spectrum_pastel;
+extern CRGBPalette16 spectrum_warm;
+extern CRGBPalette16 spectrum_classic;
+
+extern CRGBPalette16 * active_palette;
+
 
 #define NUM_LEDS_PER_STRIP 150
 #define NUM_STRIPS 8

@@ -75,10 +75,10 @@ void OSCMsgReceive()
     if (debug) {
       Serial.println("Routing OSC message");
     }
-    msgIN.route("/Program",changeLEDProgram);
-    msgIN.route("/Variable",changeValue);
-    msgIN.route("/Colorpreset",changeColorPreset);
-    msgIN.route("/react", changeAudioReactSettings);
+    msgIN.route("/program",changeLEDProgram);
+    msgIN.route("/variable",changeValue);
+    // msgIN.route("/react", changeAudioReactSettings);
+    msgIN.route("/palette",setActivePalette);
   }
 
 }

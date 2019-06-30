@@ -1,5 +1,5 @@
 #include "utility_functions.h"
-
+bool debug_utility = false;
 void updateLEDs()
 {
   if(update)
@@ -23,6 +23,9 @@ void updateLEDs()
         case PREPROGRAM:
           preprogramUpdate();
           break;
+        case VUMETER:
+          Serial.println("Case VUMETER");
+          vumeterUpdate();
         default:
           break;
       }
@@ -70,108 +73,126 @@ void setBlinkRandomTime(uint32_t x)
   blink_random_time = x;
 }
 
-void setActivePalette(int x) {
-  active_palette = blink_palette_array[x];
-}
+void setActivePalette(OSCMessage &msg, int addrOffset) {
 
-
-void changeColorPreset(OSCMessage &msg, int addrOffset )
-{
-  if (debug) {
-    Serial.println("Changing color preset");
+  if(msg.fullMatch("/palette/classic")) {
+    active_palette = &spectrum_classic;
+    spec_mode = GRADIENT;
+  }
+  if(msg.fullMatch("/palette/warm")) {
+    active_palette = &spectrum_warm;
+    spec_mode = GRADIENT;
+  }
+  if(msg.fullMatch("/palette/pastel")) {
+    active_palette = &spectrum_pastel;
+    spec_mode = GRADIENT;
+  }
+  if(msg.fullMatch("/palette/candy")) {
+    active_palette = &spectrum_candy;
+    spec_mode = GRADIENT;
+  }
+  if(msg.fullMatch("/palette/rainbow")) {
+    spec_mode = RAINBOW;
+  }
+  if(msg.fullMatch("/palette/blue")) {
+    active_palette = &blink_palette_bluetones;
+    spec_mode = GRADIENT;
+  }
+  if(msg.fullMatch("/palette/orange")) {
+    active_palette = &blink_palette_orange;
+    spec_mode = GRADIENT;
+  }
+  if(msg.fullMatch("/palette/purple")) {
+    active_palette = &blink_palette_purple;
+    spec_mode = GRADIENT;
   }
 
-  update = true;  //Times are a changin', we need to update
-
-  if(msg.fullMatch("/Colorpreset"))
-  {
-
-    if (debug) {
-      Serial.println("ColorPreset");
-    }
-    uint8_t color_preset_number = (uint8_t)msg.getFloat(0);
-    setColorPreset(color_preset_number);
-  }
 }
 
 void changeLEDProgram(OSCMessage &msg, int addrOffset )
 {
   update = true;
 
-  if(msg.fullMatch("/Program/blink"))
+  if(msg.fullMatch("/program/blink"))
   {
     blink();
-
-    if (debug) {
+    if (debug_utility) {
       Serial.println("Activated the program Blink");
     }
   }
 
-  if(msg.fullMatch("/Program/theaterchase"))
+  if(msg.fullMatch("/program/theaterchase"))
   {
     theaterChase();
-    if (debug) {
+    if (debug_utility) {
       Serial.println("Activated the program Theater Chase");
     }
   }
 
-  if(msg.fullMatch("/Program/scanner"))
+  if(msg.fullMatch("/program/scanner"))
   {
     scanner();
-
-    if (debug) {
+    if (debug_utility) {
       Serial.println("Activated the program Scanner");
+    }
+  }
+
+  if(msg.fullMatch("/program/vumeter"))
+  {
+    vumeter();
+    if (debug_utility) {
+      Serial.println("Activated the program VU-meter");
     }
   }
 }
 
 void changeValue(OSCMessage &msg, int addrOffset )
 {
-  if (msg.fullMatch("/Variable/interval"))
+  if (msg.fullMatch("/variable/interval"))
   {
     float value = msg.getFloat(0);
     setInterval((int)value);
     update = true;
   }
 
-  if (msg.fullMatch("/Variable/value1"))
+  if (msg.fullMatch("/variable/value1"))
   {
     uint8_t value = (uint8_t)msg.getFloat(0);
     value1 = value;
     update = true;
   }
-  if (msg.fullMatch("/Variable/value2"))
+  if (msg.fullMatch("/variable/value2"))
   {
     uint8_t value = (uint8_t)msg.getFloat(0);
     value2 = value;
     update = true;
   }
-  if (msg.fullMatch("/Variable/saturation1"))
+  if (msg.fullMatch("/variable/saturation1"))
   {
     uint8_t saturation = (uint8_t)msg.getFloat(0);
     saturation1 = saturation;
     update = true;
   }
-  if (msg.fullMatch("/Variable/saturation2"))
+  if (msg.fullMatch("/variable/saturation2"))
   {
     uint8_t saturation = (uint8_t)msg.getFloat(0);
     saturation2 = saturation;
     update = true;
   }
-  if (msg.fullMatch("/Variable/hue1"))
+  if (msg.fullMatch("/variable/hue1"))
   {
     uint8_t hue = (uint8_t)msg.getFloat(0);
     hue1 = hue;
     update = true;
   }
-  if (msg.fullMatch("/Variable/hue2"))
+  if (msg.fullMatch("/variable/hue2"))
   {
     uint8_t hue = (uint8_t)msg.getFloat(0);
     hue2 = hue;
     update = true;
   }
-  
-  if (msg.fullMatch("/Variable/color1"))
+
+  if (msg.fullMatch("/variable/color1"))
   {
     uint8_t x = (uint8_t)msg.getFloat(0);
     uint8_t y = (uint8_t)msg.getFloat(1);
@@ -182,7 +203,7 @@ void changeValue(OSCMessage &msg, int addrOffset )
     update = true;
   }
 
-  if (msg.fullMatch("/Variable/color2"))
+  if (msg.fullMatch("/variable/color2"))
   {
     uint8_t x = (uint8_t)msg.getFloat(0);
     uint8_t y = (uint8_t)msg.getFloat(1);
@@ -194,26 +215,14 @@ void changeValue(OSCMessage &msg, int addrOffset )
   }
 
   //Random interval for blink
-  if (msg.fullMatch("/Variable/blinkrandomtime"))
+  if (msg.fullMatch("/variable/blinkrandomtime"))
   {
     float value = msg.getFloat(0);
     setBlinkRandomTime((int)value);
     update = true;
   }
 
-  if (msg.fullMatch("/Variable/palette"))
-  {
-    int x = (int)msg.getFloat(0);
-    if (x > -1) {
-      setActivePalette(x);
-    }
-    else {
-      setActivePalette(0);
-    }
-    update = true;
-  }
-
-  if (msg.fullMatch("/Variable/chase_mode"))
+  if (msg.fullMatch("/variable/chase_mode"))
   {
     uint8_t x = (uint8_t)msg.getFloat(0);
     if (x > -1)
@@ -228,21 +237,21 @@ void changeValue(OSCMessage &msg, int addrOffset )
     update = true;
   }
 
-  if (msg.fullMatch("/Variable/pixel_distance"))
+  if (msg.fullMatch("/variable/pixel_distance"))
   {
     uint8_t x = (uint8_t)msg.getFloat(0);
     pixel_distance = x;
     update = true;
   }
 
-  if (msg.fullMatch("/Variable/pixel_width"))
+  if (msg.fullMatch("/variable/pixel_width"))
   {
     uint8_t x = (uint8_t)msg.getFloat(0);
     pixel_width = x;
     update = true;
   }
 
-  if (msg.fullMatch("/Variable/direction"))
+  if (msg.fullMatch("/variable/direction"))
   {
     uint8_t x = (uint8_t)msg.getFloat(0);
     Serial.print("Direction: ");
@@ -256,15 +265,13 @@ void changeValue(OSCMessage &msg, int addrOffset )
     update = true;
   }
 
-  if (msg.fullMatch("/Variable/stopstart"))
+  if (msg.fullMatch("/variable/stopstart"))
   {
     update = 1-update;
     FastLED.delay(10);
-    Serial.print("Update: ");
-    Serial.println(update);
   }
 
-  if (msg.fullMatch("/Variable/tail_length"))
+  if (msg.fullMatch("/variable/tail_length"))
   {
     uint8_t x = (uint8_t)msg.getFloat(0);
     tail_length = x;
@@ -298,7 +305,7 @@ void setColorPreset(uint8_t color_preset)
     setHue1(25);
     setSaturation1(180);
     setValue1(255);
-    if (debug) {
+    if (debug_utility) {
       Serial.println("Activated the color preset warm white");
     }
   }
@@ -309,7 +316,7 @@ void setColorPreset(uint8_t color_preset)
     setHue1(20);
     setSaturation1(255);
     setValue1(255);
-    if (debug) {
+    if (debug_utility) {
       Serial.println("Activated the color preset orange");
     }
   }
@@ -320,7 +327,7 @@ void setColorPreset(uint8_t color_preset)
     setHue1(128);
     setSaturation1(200);
     setValue1(255);
-    if (debug) {
+    if (debug_utility) {
       Serial.println("Activated the color preset bluegreen");
     }
   }
@@ -330,7 +337,7 @@ void setColorPreset(uint8_t color_preset)
     setHue1(230);
     setSaturation1(255);
     setValue1(255);
-    if (debug) {
+    if (debug_utility) {
       Serial.println("Activated the color preset purple");
     }
   }

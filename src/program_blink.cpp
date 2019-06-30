@@ -1,13 +1,4 @@
 #include "program_blink.h"
-
-
-
-
-CRGBPalette16 * blink_palette_array[] = { &blink_palette_purple, &blink_palette_orange, &blink_palette_bluetones};
-CRGBPalette16 * active_palette;
-
-
-
 uint8_t index_LEDi[NUM_LEDS_PER_STRIP * NUM_STRIPS];
 uint32_t next_blink_LEDi[NUM_LEDS_PER_STRIP * NUM_STRIPS];
 uint32_t blink_random_time;
@@ -28,7 +19,6 @@ void blink()
   active_palette = &blink_palette_bluetones;
   update = true;
   Serial.println("Program BLINK activated!");
-  react_to_audio = false;
 }
 
 // Update the Blink pattern
