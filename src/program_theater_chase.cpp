@@ -22,13 +22,12 @@ void theaterChase()
   pixel_width = 10;
   update = true;
   increment_by1 = 1;
-  // react_to_audio = true;
 }
 
 
 void theaterChaseUpdate()
 {
-  // audioReact((audio_reactive_setting)reactive_setting);
+  audioReact((audio_reactive_setting)reactive_setting);
   if (c_mode == RAINBOW_CHASE)
   {
     uint8_t tail = 0;
@@ -71,4 +70,22 @@ void theaterChaseUpdate()
 
   FastLED.show();
   incrementIndex(&program_index1, &total_steps1, &increment_by1);
+}
+
+void sendTheaterValuesToTouchosc()
+{
+  OSCMsgSend("/variable/interval", (float)interval);
+  OSCMsgSend("/variable/value1", (float)value1);
+  OSCMsgSend("/variable/value2", (float)value2);
+  OSCMsgSend("/variable/pixel_width", (float)pixel_width);
+  OSCMsgSend("/variable/pixel_distance", (float)pixel_distance);
+
+}
+
+void theaterSettings(OSCMessage &msg, int addrOffset)
+{
+    if (msg.fullMatch("/scanner/page"))
+    {
+      sendTheaterValuesToTouchosc();
+    }
 }

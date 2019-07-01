@@ -6,10 +6,8 @@ float vumeter_level_old[NUM_STRIPS];
 float vumeter_smoothing_coeff_positive = 1.0; // experiment with different coefficients; --> 0.0 < smoothing_coeff < 1.0
 float vumeter_smoothing_coeff_negative = 0.1;
 
-// Audio library objects
-AudioInputAnalog         adc_vumeter(A3);       //xy=99,55
-AudioAnalyzeFFT1024      fft_vumeter;            //xy=265,75
-AudioConnection          patchCord_vumeter(adc_vumeter, fft_vumeter);
+// AUDIO OBJECTS
+// Audio objects are defined in main.h because they are shared between multiple programs
 
 // These parameters adjust the vertical thresholds
 const float maxLevel = 0.5;      // 1.0 = max, lower is more "sensitive"
@@ -43,13 +41,13 @@ void vumeter()
 void vumeterUpdate()
 {
   if(debug_vumeter) {
-    Serial.println("Vumeter update");
+    Serial.println("Er vi her?");
   }
   unsigned int x, y, freqBin;
   float level;
   uint8_t gradientIndex;
 
-  if (fft_vumeter.available())
+  if (fft.available())
   {
     // freqBin counts which FFT frequency data has been used,
     // starting at low frequency
@@ -58,7 +56,7 @@ void vumeterUpdate()
     for (x=0; x < NUM_STRIPS; x++)
     {
       // get the volume for each horizontal pixel position
-      level = fft_vumeter.read(freqBin, freqBin + frequencyBinsHorizontal[x] - 1);
+      level = fft.read(freqBin, freqBin + frequencyBinsHorizontal[x] - 1);
       float diff = level - vumeter_level_old[x];
       if (diff > 0.0) {
         level = vumeter_smoothing_coeff_positive * level + (1.0 - vumeter_smoothing_coeff_positive) * vumeter_level_old[x];

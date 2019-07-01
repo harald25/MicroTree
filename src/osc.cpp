@@ -77,8 +77,10 @@ void OSCMsgReceive()
     }
     msgIN.route("/program",changeLEDProgram);
     msgIN.route("/variable",changeValue);
-    // msgIN.route("/react", changeAudioReactSettings);
+    msgIN.route("/react", audioReactSettings);
     msgIN.route("/palette",setActivePalette);
+    msgIN.route("/scanner",scannerSettings);
+    msgIN.route("/theater",scannerSettings);
   }
 
 }

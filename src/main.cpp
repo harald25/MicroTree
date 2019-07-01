@@ -4,6 +4,10 @@
 // If set to true, debug messages will be output to serial device
 bool debug = false;
 
+AudioInputAnalog          adc1(A3); //Defined here and used in vumeter and audioreact
+AudioAnalyzeFFT1024       fft;
+AudioConnection           patchCord(adc1, fft);
+
 CRGB leds [NUM_LEDS_PER_STRIP*NUM_STRIPS];
 display_mode displaymode;
 direction dir;
@@ -27,8 +31,6 @@ char osc_message_address[18];
 float delta;
 float slope;
 
-// Put in a separate file because it's long as fuck
-#include "led_coordinate_array.txt"
 
 // GRADIENT PALLETTES
 DEFINE_GRADIENT_PALETTE( blink_purple_gp ) {
@@ -110,17 +112,17 @@ void setup() {
   }
 
   //For sound reactivity
-  AudioMemory(20);
+  AudioMemory(16);
 
   FastLED.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
   FastLED.setCorrection(COLOR_CORRECTION);
   FastLED.setBrightness(GLOBAL_BRIGHTNESS);
 
-  vumeter();
+  theaterChase();
 }
 
 void loop() {
     OSCMsgReceive();
+    audioReact((audio_reactive_setting)reactive_setting);
     updateLEDs();
-    Serial.println("Looping");
 }

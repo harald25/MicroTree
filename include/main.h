@@ -19,6 +19,11 @@ enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM, VUM
 #include "program_preprogram.h"
 #include "audio_react.h"
 #include "program_vumeter.h"
+#include "audio_react.h"
+
+extern AudioInputAnalog         adc1;
+extern AudioAnalyzeFFT1024      fft;
+extern AudioConnection          patchCord;
 
 extern CRGBPalette16 blink_palette_purple;
 extern CRGBPalette16 blink_palette_orange;
@@ -28,7 +33,6 @@ extern CRGBPalette16 spectrum_candy;
 extern CRGBPalette16 spectrum_pastel;
 extern CRGBPalette16 spectrum_warm;
 extern CRGBPalette16 spectrum_classic;
-
 extern CRGBPalette16 * active_palette;
 
 

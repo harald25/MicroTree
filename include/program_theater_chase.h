@@ -9,5 +9,6 @@ extern uint8_t pixel_distance;
 
 void theaterChase();
 void theaterChaseUpdate();
+void theaterSettings(OSCMessage &msg, int addrOffset);
 
 #endif

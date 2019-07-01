@@ -19,6 +19,7 @@ void blink()
   active_palette = &blink_palette_bluetones;
   update = true;
   Serial.println("Program BLINK activated!");
+  react_to_audio = false;
 }
 
 // Update the Blink pattern

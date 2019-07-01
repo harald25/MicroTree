@@ -68,3 +68,17 @@ void scannerUpdate()
   FastLED.show();
   incrementIndex(&program_index1, &total_steps1, &increment_by1);
 }
+
+void sendScannerValuesToTouchosc()
+{
+  OSCMsgSend("/variable/interval", (float)interval);
+  OSCMsgSend("/variable/tail_length", (float)tail_length);
+}
+
+void scannerSettings(OSCMessage &msg, int addrOffset)
+{
+    if (msg.fullMatch("/scanner/page"))
+    {
+      sendScannerValuesToTouchosc();
+    }
+}
