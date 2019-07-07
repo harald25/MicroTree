@@ -24,7 +24,6 @@ void updateLEDs()
           preprogramUpdate();
           break;
         case VUMETER:
-          Serial.println("Case VUMETER");
           vumeterUpdate();
         default:
           break;
@@ -113,6 +112,14 @@ void changeLEDProgram(OSCMessage &msg, int addrOffset )
 {
   update = true;
 
+  if(msg.fullMatch("/program/preprogram"))
+  {
+    preprogram();
+    if (debug_utility) {
+      Serial.println("Activated the program Preprogram");
+    }
+  }
+
   if(msg.fullMatch("/program/blink"))
   {
     blink();
@@ -140,6 +147,7 @@ void changeLEDProgram(OSCMessage &msg, int addrOffset )
   if(msg.fullMatch("/program/vumeter"))
   {
     vumeter();
+
     if (debug_utility) {
       Serial.println("Activated the program VU-meter");
     }
@@ -276,6 +284,13 @@ void changeValue(OSCMessage &msg, int addrOffset )
     uint8_t x = (uint8_t)msg.getFloat(0);
     tail_length = x;
     update = true;
+  }
+
+  if (msg.fullMatch("/variable/globalbrightness"))
+  {
+    uint8_t brightness = (uint8_t)msg.getFloat(0);
+    FastLED.setBrightness(brightness);
+    OSCMsgSend("/variable/globalbrightness/value", brightness);
   }
 
 }

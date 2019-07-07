@@ -1,5 +1,5 @@
 #include "program_vumeter.h"
-bool debug_vumeter = true;
+bool debug_vumeter = false;
 
 spectrum_mode spec_mode;
 float vumeter_level_old[NUM_STRIPS];

@@ -20,56 +20,62 @@ float smoothing_coeff_negative = 0.5;
 bool react_to_audio = false;
 uint16_t fft_start = 1;
 uint16_t fft_stop = 3;
-uint8_t amplification = 10;
+uint8_t amplification = 5;
 
 
 
 void audioReact(audio_reactive_setting setting)
 {
-  if(react_to_audio)
+  if((active_preprogram != VUMETER) && (active_program != VUMETER) )
   {
-    float level;
-    if (fft.available())
+    if(react_to_audio)
     {
-      //In casee the user sets stop higher than start via TouchOSC
-      if(fft_stop < fft_start) {
-        fft_stop = fft_start;
-      }
-      level = fft.read(fft_start,fft_stop);
+      float level;
+      if (fft.available())
+      {
+        //In casee the user sets stop higher than start via TouchOSC
+        if(fft_stop < fft_start) {
+          fft_stop = fft_start;
+        }
+        level = fft.read(fft_start,fft_stop);
 
-      if((level-level_old) > 0.0)
-      {
-        level = smoothing_coeff_positive * level + (1.0 - smoothing_coeff_positive) * level_old;
-      }
-      else
-      {
-        level = smoothing_coeff_negative * level + (1.0 - smoothing_coeff_negative) * level_old;
-      }
-      level_old = level;
-      level = (level * audio_rective_setting_max_value) * amplification;
+        if((level-level_old) > 0.0)
+        {
+          level = smoothing_coeff_positive * level + (1.0 - smoothing_coeff_positive) * level_old;
+        }
+        else
+        {
+          level = smoothing_coeff_negative * level + (1.0 - smoothing_coeff_negative) * level_old;
+        }
+        level_old = level;
+        level = (level * audio_rective_setting_max_value) * amplification;
 
-      switch (setting)
-      {
-        case HUE1:
-          hue1 = level;
-          break;
-        case HUE2:
-          hue2 = level;
-          break;
-        case SAT1:
-          saturation1 = level;
-          break;
-        case SAT2:
-          saturation2 = level;
-          break;
-        case VAL1:
-          value1 = level;
-          break;
-        case VAL2:
-          value2 = level;
-          break;
-        default:
-          break;
+        switch (setting)
+        {
+          case HUE1:
+            hue1 = level;
+            break;
+          case HUE2:
+            hue2 = level;
+            break;
+          case SAT1:
+            saturation1 = level;
+            break;
+          case SAT2:
+            saturation2 = level;
+            break;
+          case VAL1:
+            value1 = level;
+            break;
+          case VAL2:
+            value2 = level;
+            break;
+          case GLOB_BRIGHTNESS:
+            FastLED.setBrightness(level);
+            break;
+          default:
+            break;
+        }
       }
     }
   }
@@ -90,6 +96,8 @@ void sendReactValuesToTouchosc()
 
   OSCMsgSend("/react/smooth_neg/value", (float)smoothing_coeff_negative);
   OSCMsgSend("/react/smooth_neg", (float)smoothing_coeff_negative);
+
+  OSCMsgSend("/react/amplification", (float)amplification);
 }
 
 void setAudioReact(bool react) {
@@ -147,6 +155,10 @@ void setAudioReactiveSetting(uint8_t setting) {
   reactive_setting = (audio_reactive_setting)setting;
 }
 
+void setAudioAmplification(uint8_t setting) {
+  amplification = setting;
+}
+
 void audioReactSettings(OSCMessage &msg, int addrOffset)
 {
   if (msg.fullMatch("/react/toggle"))
@@ -182,5 +194,10 @@ void audioReactSettings(OSCMessage &msg, int addrOffset)
   {
     float value = msg.getFloat(0);
     setAudioReactiveSetting((uint8_t)value);
+  }
+  if (msg.fullMatch("/react/amplification"))
+  {
+    float value = msg.getFloat(0);
+    setAudioAmplification(value);
   }
 }

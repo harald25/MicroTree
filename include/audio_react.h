@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-enum audio_reactive_setting { HUE1, HUE2, SAT1, SAT2, VAL1, VAL2};
+enum audio_reactive_setting { HUE1, HUE2, SAT1, SAT2, VAL1, VAL2,GLOB_BRIGHTNESS};
 extern audio_reactive_setting reactive_setting;
 extern bool react_to_audio;
 extern float thresholdVertical[];
