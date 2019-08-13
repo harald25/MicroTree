@@ -16,7 +16,7 @@ void scanner()
   total_steps1 = (NUM_LEDS_PER_STRIP*NUM_STRIPS-1)*2;
   }
   if (displaymode == SAME_ON_ALL_STRIPS) {
-    total_steps1 = (NUM_LEDS_PER_STRIP-1)*2;
+    total_steps1 = ((NUM_LEDS_PER_STRIP / STRIP_SPLIT)-1)*2;
   }
   program_index1 = 0;
   increment_by1 = 1;
@@ -46,21 +46,21 @@ void scannerUpdate()
   }
   if(displaymode == SAME_ON_ALL_STRIPS)
   {
-    for (int i = 0; i < NUM_STRIPS; i++)
+    for (int i = 0; i < NUM_STRIPS * STRIP_SPLIT; i++)
     {
-      for (int y = 0; y < NUM_LEDS_PER_STRIP; y++)
+      for (int y = 0; y < NUM_LEDS_PER_STRIP / STRIP_SPLIT; y++)
       {
         if (y == program_index1) // first half of the scan
         {
-           leds[y+(i*NUM_LEDS_PER_STRIP)] = CHSV(hue1, saturation1, value1);
+           leds[y+(i*NUM_LEDS_PER_STRIP / STRIP_SPLIT)] = CHSV(hue1, saturation1, value1);
         }
         else if (y == total_steps1 - program_index1) // The return trip.
         {
-          leds[y+(i*NUM_LEDS_PER_STRIP)] = CHSV(hue1, saturation1, value1);
+          leds[y + (i * NUM_LEDS_PER_STRIP / STRIP_SPLIT)] = CHSV(hue1, saturation1, value1);
         }
         else  // fade to black
         {
-          leds[y+(i*NUM_LEDS_PER_STRIP)].fadeToBlackBy( tail_length );
+          leds[y + (i * NUM_LEDS_PER_STRIP / STRIP_SPLIT)].fadeToBlackBy(tail_length);
         }
       }
     }

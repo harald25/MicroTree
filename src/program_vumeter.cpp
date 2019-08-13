@@ -2,7 +2,7 @@
 bool debug_vumeter = false;
 
 spectrum_mode spec_mode;
-float vumeter_level_old[NUM_STRIPS];
+float vumeter_level_old[NUM_STRIPS*STRIP_SPLIT];
 float vumeter_smoothing_coeff_positive = 1.0; // experiment with different coefficients; --> 0.0 < smoothing_coeff < 1.0
 float vumeter_smoothing_coeff_negative = 0.1;
 
@@ -16,13 +16,13 @@ const float linearBlend = 0.3;   // useful range is 0 to 0.7
 // This array holds the volume level (0 to 1.0) for each
 // vertical pixel to turn on.  Computed in setup() using
 // the 3 parameters above.
-float thresholdVertical[NUM_LEDS_PER_STRIP];
+float thresholdVertical[NUM_LEDS_PER_STRIP/STRIP_SPLIT];
 
 // This array specifies how many of the FFT frequency bin
 // to use for each horizontal pixel.  Because humans hear
 // in octaves and FFT bins are linear, the low frequencies
 // use a small number of bins, higher frequencies use more.
-int frequencyBinsHorizontal[NUM_STRIPS] = {
+int frequencyBinsHorizontal[NUM_STRIPS*STRIP_SPLIT] = {
    1, 2, 4, 8, 16, 32, 64, 128
 };
 
@@ -53,7 +53,7 @@ void vumeterUpdate()
     // starting at low frequency
     freqBin = 0;
 
-    for (x=0; x < NUM_STRIPS; x++)
+    for (x=0; x < NUM_STRIPS*STRIP_SPLIT; x++)
     {
       // get the volume for each horizontal pixel position
       level = fft.read(freqBin, freqBin + frequencyBinsHorizontal[x] - 1);
@@ -67,10 +67,10 @@ void vumeterUpdate()
       }
 
 
-      for (y=0; y < NUM_LEDS_PER_STRIP; y++) {
+      for (y=0; y < NUM_LEDS_PER_STRIP/STRIP_SPLIT; y++) {
         // for each vertical pixel, check if above the threshold
         // and turn the LED on or off
-        gradientIndex = (y+1)*(255/NUM_LEDS_PER_STRIP);
+        gradientIndex = (y+1)*(255/(NUM_LEDS_PER_STRIP/STRIP_SPLIT));
         //gradientIndex = 200;
 
         if (level >= thresholdVertical[y]) {
@@ -103,16 +103,16 @@ void vumeterUpdate()
 // are arranged differently, edit this code...
 unsigned int xy(unsigned int x, unsigned int y)
 {
-  return (NUM_LEDS_PER_STRIP*x)+y;
+  return ((NUM_LEDS_PER_STRIP/STRIP_SPLIT)*x)+y;
 }
 
 // Run once from setup, the compute the vertical levels
 void computeVerticalLevels() {
   unsigned int y;
   float n, logLevel, linearLevel;
-  uint8_t x = NUM_LEDS_PER_STRIP;
-  for (y=0; y < NUM_LEDS_PER_STRIP; y++) {
-    n = (float)x / (float)(NUM_LEDS_PER_STRIP - 1);
+  uint8_t x = NUM_LEDS_PER_STRIP/STRIP_SPLIT;
+  for (y=0; y < NUM_LEDS_PER_STRIP/STRIP_SPLIT; y++) {
+    n = (float)x / (float)(NUM_LEDS_PER_STRIP/STRIP_SPLIT - 1);
     logLevel = pow10f(n * -1.0 * (dynamicRange / 20.0));
     linearLevel = 1.0 - n;
     linearLevel = linearLevel * linearBlend;

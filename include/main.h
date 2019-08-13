@@ -35,8 +35,8 @@ extern CRGBPalette16 spectrum_warm;
 extern CRGBPalette16 spectrum_classic;
 extern CRGBPalette16 * active_palette;
 
-
-#define NUM_LEDS_PER_STRIP 150
+#define STRIP_SPLIT 2 //Define how many "virtual strips" each of the outputs should be split into
+#define NUM_LEDS_PER_STRIP 300
 #define NUM_STRIPS 8
 #define COLOR_CORRECTION TypicalSMD5050
 #define GLOBAL_BRIGHTNESS 255
