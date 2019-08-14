@@ -4,7 +4,7 @@
 // ----- ENUMERATIONS ----- //
 enum direction { FORWARD, REVERSE};
 enum display_mode { CONTINOUS_STRIP, SAME_ON_ALL_STRIPS };
-enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM, VUMETER};
+enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM, VUMETER,PULSE};
 
 #define USE_OCTOWS2811
 #include<OctoWS2811.h>
@@ -23,6 +23,7 @@ enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM, VUM
 #include "audio_react.h"
 #include "program_vumeter.h"
 #include "audio_react.h"
+#include "program_pulse.h"
 
 extern AudioInputAnalog         adc1;
 extern AudioAnalyzeFFT1024      fft;

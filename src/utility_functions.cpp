@@ -25,6 +25,8 @@ void updateLEDs()
           break;
         case VUMETER:
           vumeterUpdate();
+        case PULSE:
+          pulseUpdate();
         default:
           break;
       }

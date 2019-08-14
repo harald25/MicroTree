@@ -123,7 +123,7 @@ void setup() {
   FastLED.setCorrection(COLOR_CORRECTION);
   FastLED.setBrightness(GLOBAL_BRIGHTNESS);
 
-  blink();
+  pulse();
 }
 
 void loop() {
