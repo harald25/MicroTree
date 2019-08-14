@@ -9,6 +9,9 @@ enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM, VUM
 #define USE_OCTOWS2811
 #include<OctoWS2811.h>
 #include<FastLED.h>
+#if defined(FASTLED_VERSION) && (FASTLED_VERSION < 3003000)
+#error "Requires FastLED 3.3 or later; check github for latest code."
+#endif
 #include <Audio.h>
 
 #include "utility_functions.h"
@@ -35,7 +38,8 @@ extern CRGBPalette16 spectrum_warm;
 extern CRGBPalette16 spectrum_classic;
 extern CRGBPalette16 * active_palette;
 
-#define STRIP_SPLIT 2 //Define how many "virtual strips" each of the outputs should be split into
+#define STRIP_SPLIT 2   //Define how many "virtual strips" each of the outputs should be split into
+                        //NUM_LEDS_PER_STRIP must be dividable by this number
 #define NUM_LEDS_PER_STRIP 300
 #define NUM_STRIPS 8
 #define COLOR_CORRECTION TypicalSMD5050

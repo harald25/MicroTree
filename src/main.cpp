@@ -118,7 +118,7 @@ void setup() {
   FastLED.setCorrection(COLOR_CORRECTION);
   FastLED.setBrightness(GLOBAL_BRIGHTNESS);
 
-  vumeter();
+  blink();
 }
 
 void loop() {
