@@ -8,7 +8,10 @@ AudioInputAnalog          adc1(A3); //Defined here and used in vumeter and audio
 AudioAnalyzeFFT1024       fft;
 AudioConnection           patchCord(adc1, fft);
 
-CRGB leds [NUM_LEDS_PER_STRIP*NUM_STRIPS];
+CRGB leds [NUM_LEDS_PER_STRIP * NUM_STRIPS];
+CRGB leds2[NUM_LEDS_PER_STRIP * NUM_STRIPS];
+CRGB leds3[NUM_LEDS_PER_STRIP * NUM_STRIPS];
+
 display_mode displaymode;
 direction dir;
 program active_program;
@@ -115,10 +118,12 @@ void setup() {
   AudioMemory(16);
 
   FastLED.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
+  //FastLED.addLeds<OCTOWS2811>(leds2, NUM_LEDS_PER_STRIP);
+  //FastLED.addLeds<OCTOWS2811>(leds3, NUM_LEDS_PER_STRIP);
   FastLED.setCorrection(COLOR_CORRECTION);
   FastLED.setBrightness(GLOBAL_BRIGHTNESS);
 
-  vumeter();
+  blink();
 }
 
 void loop() {
