@@ -1,71 +1,314 @@
 #include "program_pulse.h"
 
-enum pulse_stage {INCREASE, DECREASE};
+int index_pulse_strip_i[NUM_STRIPS * STRIP_SPLIT];
+int next_pulse_strip_i[NUM_STRIPS * STRIP_SPLIT];
+uint16_t pulse_minimum_random_time;
+uint8_t pulse_lookuptable[] = {
+    10,
+    25,
+    35,
+    35,
+    35,
+    35,
+    35,
+    35,
+    35,
+    36,
+    36,
+    36,
+    36,
+    37,
+    37,
+    38,
+    38,
+    39,
+    39,
+    40,
+    40,
+    41,
+    42,
+    43,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    52,
+    53,
+    54,
+    56,
+    57,
+    59,
+    60,
+    62,
+    64,
+    65,
+    67,
+    69,
+    71,
+    73,
+    75,
+    78,
+    80,
+    82,
+    85,
+    87,
+    90,
+    93,
+    96,
+    99,
+    102,
+    105,
+    108,
+    111,
+    114,
+    118,
+    121,
+    125,
+    128,
+    132,
+    136,
+    140,
+    144,
+    147,
+    151,
+    155,
+    159,
+    164,
+    168,
+    172,
+    176,
+    180,
+    184,
+    188,
+    192,
+    196,
+    200,
+    204,
+    208,
+    211,
+    215,
+    219,
+    222,
+    225,
+    229,
+    232,
+    235,
+    237,
+    240,
+    242,
+    244,
+    246,
+    248,
+    250,
+    251,
+    252,
+    255,
+    255,
+    255,
+    255,
+    255,
+    254,
+    254,
+    254,
+    253,
+    253,
+    253,
+    252,
+    251,
+    251,
+    250,
+    249,
+    249,
+    248,
+    247,
+    246,
+    245,
+    244,
+    243,
+    242,
+    241,
+    240,
+    238,
+    237,
+    236,
+    235,
+    233,
+    232,
+    230,
+    229,
+    227,
+    226,
+    224,
+    222,
+    221,
+    219,
+    217,
+    215,
+    213,
+    212,
+    210,
+    208,
+    206,
+    204,
+    202,
+    200,
+    197,
+    195,
+    193,
+    191,
+    189,
+    187,
+    184,
+    182,
+    180,
+    177,
+    175,
+    173,
+    170,
+    168,
+    166,
+    163,
+    161,
+    158,
+    156,
+    153,
+    151,
+    148,
+    146,
+    143,
+    141,
+    138,
+    136,
+    133,
+    131,
+    128,
+    126,
+    123,
+    121,
+    118,
+    116,
+    113,
+    111,
+    108,
+    106,
+    103,
+    101,
+    98,
+    96,
+    93,
+    91,
+    89,
+    86,
+    84,
+    81,
+    79,
+    77,
+    74,
+    72,
+    70,
+    68,
+    65,
+    63,
+    61,
+    59,
+    57,
+    55,
+    53,
+    51,
+    49,
+    47,
+    45,
+    43,
+    41,
+    39,
+    37,
+    36,
+    34,
+    32,
+    30,
+    29,
+    27,
+    26,
+    24,
+    23,
+    21,
+    20,
+    19,
+    17,
+    16,
+    15,
+    14,
+    13,
+    12,
+    11,
+    10,
+    9,
+    8,
+    7,
+    6,
+    5,
+    5,
+    4,
+    3,
+    3,
+    2,
+    2,
+    1,
+    0
+};
 
-float acceleration = 1.5;
-float deceleration = 0.5;
-pulse_stage stage;
-int next_pulse;
-bool pulse_active;
-
-void pulse()
+void
+pulse()
 {
     active_program = PULSE;
-    stage = INCREASE;
-    interval = 100;
+    interval = 2;
     hue1 = 200;
     saturation1 = 200;
     value1 = 0;
     update = true;
-    next_pulse = millis();
-    pulse_active = false;
-    
+    pulse_minimum_random_time = 5000;
+    increment_by1 = 2;
+    total_steps1 = 255;
+
+    for (uint8_t i = 0; i < NUM_STRIPS * STRIP_SPLIT; i++) {
+        index_pulse_strip_i[i] = 0;
+        next_pulse_strip_i[i] = millis()+random16(10000)+pulse_minimum_random_time; 
+    }
 }
 
 void pulseUpdate()
 {
-    if ((millis() > next_pulse) && (!pulse_active)) {
-        pulse_active = true;
-        Serial.println("Activating pulse");
-    }
-    
-    if (pulse_active) 
+    // Looping through all the elements of next_pulse_strip_i[] array
+    // It has as many elements as there are "virtual strips". Number of virtual strips = NUM_STRIPS * STRIP_SPLIT
+    for (uint8_t i = 0; i < NUM_STRIPS * STRIP_SPLIT; i++)
     {
-        uint8_t value1_old = value1;
-        if (stage == INCREASE)
+        // Checks if time now is equal to, or larger than the time for the next pulse for strip number i
+        if (millis() >= next_pulse_strip_i[i])
         {
-          
-            if (value1 == 0) {
-                value1 = 1;
-                Serial.println(value1);
+            // Loops through all elements (LEDs) in the current virtual strip
+            for (uint8_t x = 0; x < NUM_LEDS_PER_STRIP / STRIP_SPLIT; x++)
+            {
+                leds[(i * (NUM_LEDS_PER_STRIP / STRIP_SPLIT)) + x] = CHSV(hue1,saturation1,pulse_lookuptable[index_pulse_strip_i[i]]);
             }
-            else if (value1 > 0) {
-                Serial.println("Kommer vi hit?");
-                value1 = (value1 * acceleration) + 1;
-                if (value1 < value1_old) {      //If value1 is bigger that value1_old, it is because value1 overflowed (passed over 255).
-                    value1 = 255;
-                    stage = DECREASE;
-                }
+            index_pulse_strip_i[i] ++;
+            // Check if we reached the end of total_steps1. If we did a new time for the next pulse should be generated
+            if (index_pulse_strip_i[i] >= total_steps1) {
+                next_pulse_strip_i[i] = millis()+random16(10000)+pulse_minimum_random_time;
+                index_pulse_strip_i[i] = 0;
+                Serial.println("--------------------");
+                Serial.print("Strip number: ");
+                Serial.println(i);
+                Serial.print("New time for next pulse is: ");
+                Serial.print(next_pulse_strip_i[i]);
+                Serial.println("--------------------");
             }
+            // Using incrementIndex from utility_functions to increment our index
+            //incrementIndex(&index_pulse_strip_i[i],&total_steps1,&increment_by1);
         }
-        else if (stage == DECREASE)
-        {
-            Serial.println("Stage = DECREASE");
-           value1 = value1 * deceleration;
-           if (value1 > value1_old) {       //If value1 is bigger that value1_old, it is because value1 underflowed (passed under 0)
-                value1 = 0;
-                stage = INCREASE;
-                pulse_active = false;
-                next_pulse = millis() + 5000;
-           }
-        }
-        else {
-            Serial.println("You should never have ended up here!");
-        }
-        for(int i = 0; i < NUM_LEDS_PER_STRIP * NUM_STRIPS; i++)
-        {
-            leds[i] = CHSV(hue1, saturation1, value1);
-        }
-        FastLED.show();
     }
+    FastLED.show();
 }
