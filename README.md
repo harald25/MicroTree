@@ -17,3 +17,7 @@ Some variables are global and all programs use them. Like hue1, hue2, saturation
 * Think out better solutions for the physical connecting and setup of all the equipment
   * Better connection box. Preferably water proof
   * Easy power connection plugs on everything
+
+## Some example videos
+https://www.youtube.com/watch?v=s0cHIyjrVMI
+https://www.youtube.com/watch?v=oguy4mDjrlk&t=1s
