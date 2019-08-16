@@ -1,7 +1,7 @@
 #include "program_pulse.h"
 
 int index_pulse_strip_i[NUM_STRIPS * STRIP_SPLIT];
-int next_pulse_strip_i[NUM_STRIPS * STRIP_SPLIT];
+uint32_t next_pulse_strip_i[NUM_STRIPS * STRIP_SPLIT];
 uint16_t pulse_minimum_random_time;
 uint8_t pulse_lookuptable[] = {
     10,
