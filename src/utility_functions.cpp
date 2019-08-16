@@ -301,7 +301,7 @@ void allLedsOff()
 {
   for(int x = 0; x < NUM_LEDS_PER_STRIP*NUM_STRIPS;x++)
   {
-    leds[led_array[x]] = CRGB::Black;
+    leds[x] = CRGB::Black;
   }
 }
 
@@ -309,6 +309,68 @@ void allLedsOn()
 {
   for(int x = 0; x < NUM_LEDS_PER_STRIP*NUM_STRIPS;x++)
   {
-    leds[led_array[x]] = CRGB::White;
+    leds[x] = CRGB::White;
+  }
+}
+
+void generate_led_order_array(led_order order)
+{
+  uint16_t ledindex = 0;
+
+  // "Normal" order. The pixels are ordered the way the strips are connected
+  if (order == NORMAL)
+  {
+    for (uint16_t i = 0; i < NUM_LEDS_PER_STRIP * NUM_STRIPS; i++) {
+      led_order_array[i] = i;
+    }
+  }
+
+  // Strip order is untouched, but every strip (or virtual strip if STRIP_SPLIT > 1) is backwards
+  else if (order == EVERY_STRIP_REVERSED)
+  {
+    for (uint8_t i = 0; i < NUM_STRIPS * STRIP_SPLIT; i++)
+    {
+      for (uint16_t x = NUM_LEDS_PER_STRIP / STRIP_SPLIT; x < 0; x--)
+      {
+        led_order_array[ledindex] = (i*(NUM_LEDS_PER_STRIP / STRIP_SPLIT))+x;
+        ledindex ++;
+      }
+    }
+  }
+
+  // The order of the strips are reversed, but each individual strip (or virtual strip if STRIP_SPLIT > 1) is forwards
+  else if (order == STRIPS_IN_REVERSE_ORDER)
+  {
+    for (uint8_t i = NUM_STRIPS*STRIP_SPLIT; i > 0; i--)
+    {
+      for (uint16_t x = 0; x < NUM_LEDS_PER_STRIP/STRIP_SPLIT; x++)
+      {
+        led_order_array[ledindex] = (i*NUM_LEDS_PER_STRIP)+x;
+        ledindex ++;
+      }
+    }
+  }
+
+  else if (order == EVERY_SECOND_STRIP_REVERSED)
+  {
+     for (uint8_t i = 0; i < NUM_STRIPS * STRIP_SPLIT; i++)
+    {
+      if (i % 2 == 0)
+      {
+        for (uint16_t x = 0; x < NUM_LEDS_PER_STRIP/STRIP_SPLIT; x++)
+        {
+          led_order_array[ledindex] = (i*NUM_LEDS_PER_STRIP)+x;
+          ledindex ++;
+        }
+      }
+      else
+      {
+        for (uint16_t x = NUM_LEDS_PER_STRIP / STRIP_SPLIT; x < 0; x--)
+        {
+          led_order_array[ledindex] = (i*(NUM_LEDS_PER_STRIP / STRIP_SPLIT))+x;
+          ledindex ++;
+        }
+      }
+    }
   }
 }

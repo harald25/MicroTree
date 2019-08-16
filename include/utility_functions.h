@@ -23,4 +23,5 @@ void setActivePalette(OSCMessage &msg, int addrOffset);
 void setBlinkRandomTime(uint32_t x);
 void allLedsOff();
 void allLedsOn();
+void generate_led_order_array(led_order order);
 #endif

@@ -5,14 +5,16 @@
 enum direction { FORWARD, REVERSE};
 enum display_mode { CONTINOUS_STRIP, SAME_ON_ALL_STRIPS };
 enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM, VUMETER,PULSE};
+enum led_order { NORMAL, EVERY_STRIP_REVERSED, EVERY_SECOND_STRIP_REVERSED, STRIPS_IN_REVERSE_ORDER };
 
 #define USE_OCTOWS2811
 #include<OctoWS2811.h>
+#include <Audio.h>
+
 #include<FastLED.h>
 #if defined(FASTLED_VERSION) && (FASTLED_VERSION < 3003000)
 #error "Requires FastLED 3.3 or later; check github for latest code."
 #endif
-#include <Audio.h>
 
 #include "utility_functions.h"
 #include "program_blink.h"
@@ -44,18 +46,15 @@ extern CRGBPalette16 * active_palette;
 #define NUM_LEDS_PER_STRIP 300
 #define NUM_STRIPS 8
 #define COLOR_CORRECTION TypicalSMD5050
-#define GLOBAL_BRIGHTNESS 255
-extern CRGB leds [NUM_LEDS_PER_STRIP*NUM_STRIPS];
+#define GLOBAL_BRIGHTNESS 150
 
-// ----- Array to hold x and y coordinates for all the LEDs
-extern int led_coordinates [NUM_LEDS_PER_STRIP*NUM_STRIPS][2];
 
 // ----- An array that holds the correct order of the LEDs ----- //
-// ----- Because I put each individual LED strip in reverse in my roof T_T ----- //
-extern int led_array [NUM_LEDS_PER_STRIP*NUM_STRIPS];
+extern uint16_t led_order_array[NUM_LEDS_PER_STRIP * NUM_STRIPS];
+// ----- The FastLED CRGB array(s)  ----- //
+extern CRGB leds[NUM_LEDS_PER_STRIP * NUM_STRIPS];
 
-
-// ----- DECLEARING VARIABLES ----- //
+// ----- DECLEARING GLOBAL PROGRAM VARIABLES ----- //
 extern bool debug;
 extern display_mode displaymode;
 extern direction dir;
