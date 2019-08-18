@@ -37,18 +37,18 @@ void theaterChaseUpdate()
     {
       if ((i + program_index1) % pixel_distance == 0)
       {
-        leds[i] = CHSV((i*10)%255, saturation1, value1);
+        leds[led_order_array[i]] = CHSV((i*10)%255, saturation1, value1);
         tail = pixel_width;
         last_middle = i;
       }
       else if (tail != 0)
       {
-       leds[i] = CHSV((((i*10)-(pixel_width-(tail*3)+1)))%255, saturation1, value1);
+       leds[led_order_array[i]] = CHSV((((i*10)-(pixel_width-(tail*3)+1)))%255, saturation1, value1);
        tail--;
       }
       else
       {
-        leds[i] = CHSV(hue2, saturation2, value2);
+        leds[led_order_array[i]] = CHSV(hue2, saturation2, value2);
       }
     }
   }
@@ -59,11 +59,11 @@ void theaterChaseUpdate()
     {
       if (((i + program_index1) % pixel_distance >= 0) && ((i + program_index1) % pixel_distance < pixel_width))
       {
-        leds[i] = CHSV(hue1, saturation1, value1);
+        leds[led_order_array[i]] = CHSV(hue1, saturation1, value1);
       }
       else
       {
-        leds[i] = CHSV(hue2, saturation2, value2);
+        leds[led_order_array[i]] = CHSV(hue2, saturation2, value2);
       }
     }
   }

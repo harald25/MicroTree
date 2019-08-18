@@ -19,5 +19,14 @@ Some variables are global and all programs use them. Like hue1, hue2, saturation
   * Easy power connection plugs on everything
 
 ## Some example videos
-https://www.youtube.com/watch?v=s0cHIyjrVMI
+https://www.youtube.com/watch?v=s0cHIyjrVMI  
 https://www.youtube.com/watch?v=oguy4mDjrlk&t=1s
+
+## Patch notes
+* 2019-08-18 - LED order array
+  * Added a new function in utility_functions.cpp: void generate_led_order_array(led_order order)  
+    This function fills the array led_order_array[] with a LED order depending on the specified order.  
+    So far four orders are defined: NORMAL, EVERY_SECOND_STRIP_REVERSED, EVERY_STRIP_REVERSED, and STRIPS_IN REVERSE_ORDER.
+  * Existing programs is rewritten to use led_order_array[] to reference pixels  
+    Example: what used to be `leds[i] = CRGB::White;` is now instead `leds[led_order_array[i]] = CRGB::White;`
+    
