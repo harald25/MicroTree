@@ -9,7 +9,7 @@ AudioAnalyzeFFT1024       fft;
 AudioConnection           patchCord(adc1, fft);
 
 CRGB leds [NUM_LEDS_PER_STRIP * NUM_STRIPS];
-uint16_t led_order_array[NUM_LEDS_PER_STRIP * NUM_STRIPS];
+int led_order_array[NUM_LEDS_PER_STRIP * NUM_STRIPS];
 
 display_mode displaymode;
 direction dir;
@@ -121,7 +121,7 @@ void setup() {
   //FastLED.addLeds<OCTOWS2811>(leds3, NUM_LEDS_PER_STRIP);
   FastLED.setCorrection(COLOR_CORRECTION);
   FastLED.setBrightness(GLOBAL_BRIGHTNESS);
-  generate_led_order_array(NORMAL);
+  generate_led_order_array(EVERY_SECOND_STRIP_REVERSED);
   scanner();
 }
 

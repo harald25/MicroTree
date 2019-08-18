@@ -50,7 +50,7 @@ extern CRGBPalette16 * active_palette;
 
 
 // ----- An array that holds the correct order of the LEDs ----- //
-extern uint16_t led_order_array[NUM_LEDS_PER_STRIP * NUM_STRIPS];
+extern int led_order_array[NUM_LEDS_PER_STRIP * NUM_STRIPS];
 // ----- The FastLED CRGB array(s)  ----- //
 extern CRGB leds[NUM_LEDS_PER_STRIP * NUM_STRIPS];
 

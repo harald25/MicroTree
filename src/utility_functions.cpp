@@ -315,12 +315,13 @@ void allLedsOn()
 
 void generate_led_order_array(led_order order)
 {
-  uint16_t ledindex = 0;
+  int ledindex = 0;
 
   // "Normal" order. The pixels are ordered the way the strips are connected
   if (order == NORMAL)
   {
-    for (uint16_t i = 0; i < NUM_LEDS_PER_STRIP * NUM_STRIPS; i++) {
+    Serial.println("LED order = NORMAL");
+    for (int i = 0; i < NUM_LEDS_PER_STRIP * NUM_STRIPS; i++) {
       led_order_array[i] = i;
     }
   }
@@ -328,11 +329,12 @@ void generate_led_order_array(led_order order)
   // Strip order is untouched, but every strip (or virtual strip if STRIP_SPLIT > 1) is backwards
   else if (order == EVERY_STRIP_REVERSED)
   {
-    for (uint8_t i = 0; i < NUM_STRIPS * STRIP_SPLIT; i++)
+    Serial.println("LED order = EVERY_STRIP_REVERSED");
+    for (int i = 0; i < NUM_STRIPS * STRIP_SPLIT; i++)
     {
-      for (uint16_t x = NUM_LEDS_PER_STRIP / STRIP_SPLIT; x < 0; x--)
+      for (int x = NUM_LEDS_PER_STRIP / STRIP_SPLIT; x > 0; x--)
       {
-        led_order_array[ledindex] = (i*(NUM_LEDS_PER_STRIP / STRIP_SPLIT))+x;
+        led_order_array[ledindex] = (i*(NUM_LEDS_PER_STRIP / STRIP_SPLIT))+(x-1);
         ledindex ++;
       }
     }
@@ -341,11 +343,12 @@ void generate_led_order_array(led_order order)
   // The order of the strips are reversed, but each individual strip (or virtual strip if STRIP_SPLIT > 1) is forwards
   else if (order == STRIPS_IN_REVERSE_ORDER)
   {
-    for (uint8_t i = NUM_STRIPS*STRIP_SPLIT; i > 0; i--)
+    Serial.println("LED order = STRIPS_IN_REVERSE_ORDER");
+    for (int i = NUM_STRIPS*STRIP_SPLIT; i > 0; i--)
     {
-      for (uint16_t x = 0; x < NUM_LEDS_PER_STRIP/STRIP_SPLIT; x++)
+      for (int x = 0; x < NUM_LEDS_PER_STRIP/STRIP_SPLIT; x++)
       {
-        led_order_array[ledindex] = (i*NUM_LEDS_PER_STRIP)+x;
+        led_order_array[ledindex] = ((i-1)*NUM_LEDS_PER_STRIP/STRIP_SPLIT)+x;
         ledindex ++;
       }
     }
@@ -353,24 +356,42 @@ void generate_led_order_array(led_order order)
 
   else if (order == EVERY_SECOND_STRIP_REVERSED)
   {
-     for (uint8_t i = 0; i < NUM_STRIPS * STRIP_SPLIT; i++)
+    Serial.println("LED order = EVERY_SECOND_STRIP_REVERSED");
+    for (int i = 0; i < NUM_STRIPS * STRIP_SPLIT; i++)
     {
       if (i % 2 == 0)
       {
-        for (uint16_t x = 0; x < NUM_LEDS_PER_STRIP/STRIP_SPLIT; x++)
+        for (int x = 0; x < NUM_LEDS_PER_STRIP/STRIP_SPLIT; x++)
         {
-          led_order_array[ledindex] = (i*NUM_LEDS_PER_STRIP)+x;
+          led_order_array[ledindex] = (i * (NUM_LEDS_PER_STRIP / STRIP_SPLIT)) + x;
           ledindex ++;
         }
       }
       else
       {
-        for (uint16_t x = NUM_LEDS_PER_STRIP / STRIP_SPLIT; x < 0; x--)
+        for (int x = NUM_LEDS_PER_STRIP / STRIP_SPLIT; x > 0; x--)
         {
-          led_order_array[ledindex] = (i*(NUM_LEDS_PER_STRIP / STRIP_SPLIT))+x;
+          led_order_array[ledindex] = (i*(NUM_LEDS_PER_STRIP / STRIP_SPLIT))+(x-1);
           ledindex ++;
         }
       }
     }
   }
+
+  // ----- Uncomment to print the generated LED order to terminal -----
+  //
+  // delay(5000);
+  // for (int i = 0; i < NUM_LEDS_PER_STRIP * NUM_STRIPS; i++)
+  // {
+  //   if ((i + 1) % (NUM_LEDS_PER_STRIP/STRIP_SPLIT) == 0)
+  //   {
+  //     Serial.println(led_order_array[i]);
+  //     Serial.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+  //   }
+  //   else
+  //   {
+  //     Serial.print(led_order_array[i]);
+  //     Serial.print(", ");
+  //   }
+  // }
 }

@@ -4,7 +4,7 @@ uint8_t tail_length;
 
 void scanner()
 {
-  displaymode = CONTINOUS_STRIP;
+  displaymode = SAME_ON_ALL_STRIPS;
   dir = FORWARD;
   active_program = SCANNER;
   interval = 20;
