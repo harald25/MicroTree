@@ -4,7 +4,7 @@
 // ----- ENUMERATIONS ----- //
 enum direction { FORWARD, REVERSE};
 enum display_mode { CONTINOUS_STRIP, SAME_ON_ALL_STRIPS };
-enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM, VUMETER,PULSE};
+enum program { NONE, CUSTOM_LAMP, BLINK, THEATER_CHASE, SCANNER, PREPROGRAM, VUMETER,PULSE, FIREWORKS};
 enum led_order { NORMAL, EVERY_STRIP_REVERSED, EVERY_SECOND_STRIP_REVERSED, STRIPS_IN_REVERSE_ORDER };
 
 #define USE_OCTOWS2811
@@ -26,6 +26,7 @@ enum led_order { NORMAL, EVERY_STRIP_REVERSED, EVERY_SECOND_STRIP_REVERSED, STRI
 #include "program_vumeter.h"
 #include "audio_react.h"
 #include "program_pulse.h"
+#include "program_fireworks.h"
 
 extern AudioInputAnalog         adc1;
 extern AudioAnalyzeFFT1024      fft;

@@ -27,6 +27,8 @@ void updateLEDs()
           vumeterUpdate();
         case PULSE:
           pulseUpdate();
+        case FIREWORKS:
+          fireworksUpdate();
         default:
           break;
       }
@@ -394,4 +396,5 @@ void generate_led_order_array(led_order order)
   //     Serial.print(", ");
   //   }
   // }
+
 }
