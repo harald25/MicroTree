@@ -76,16 +76,16 @@ void vumeterUpdate()
         if (level >= thresholdVertical[y]) {
           if (spec_mode == RAINBOW)
           {
-            leds[xy(x,y)] = CHSV(gradientIndex,saturation1,value1);
+            leds[led_order_array[xy(x,y)]] = CHSV(gradientIndex,saturation1,value1);
           }
           if(spec_mode == GRADIENT)
           {
-            leds[xy(x,y)] = ColorFromPalette(*active_palette,gradientIndex);
+            leds[led_order_array[xy(x,y)]] = ColorFromPalette(*active_palette,gradientIndex);
           }
         }
         else
         {
-          leds[xy(x,y)] = CRGB::Black;
+          leds[led_order_array[xy(x,y)]] = CRGB::Black;
         }
       }
       // increment the frequency bin count, so we display

@@ -30,7 +30,7 @@ void blinkUpdate()
     if (millis() >= next_blink_LEDi[i])
     {
 
-      leds[i] = ColorFromPalette( *active_palette, index_LEDi[i]);     //Sets the color of the LED to a value in a previously generated palette
+      leds[led_order_array[i]] = ColorFromPalette( *active_palette, index_LEDi[i]);     //Sets the color of the LED to a value in a previously generated palette
       index_LEDi[i]++;                                                //Increases index so that the next color in the palette will be selected on the next round
 
       //Checks if we have run through the entire color palette

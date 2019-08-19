@@ -292,22 +292,22 @@ void pulseUpdate()
             // Loops through all elements (LEDs) in the current virtual strip
             for (uint8_t x = 0; x < NUM_LEDS_PER_STRIP / STRIP_SPLIT; x++)
             {
-                leds[(i * (NUM_LEDS_PER_STRIP / STRIP_SPLIT)) + x] = CHSV(hue1,saturation1,pulse_lookuptable[index_pulse_strip_i[i]]);
+                leds[led_order_array[(i * (NUM_LEDS_PER_STRIP / STRIP_SPLIT)) + x]] = CHSV(hue1,saturation1,pulse_lookuptable[index_pulse_strip_i[i]]);
             }
             index_pulse_strip_i[i] ++;
             // Check if we reached the end of total_steps1. If we did a new time for the next pulse should be generated
-            if (index_pulse_strip_i[i] >= total_steps1) {
+            if (index_pulse_strip_i[i] >= total_steps1)
+            {
                 next_pulse_strip_i[i] = millis()+random16(10000)+pulse_minimum_random_time;
                 index_pulse_strip_i[i] = 0;
-                Serial.println("--------------------");
-                Serial.print("Strip number: ");
-                Serial.println(i);
-                Serial.print("New time for next pulse is: ");
-                Serial.print(next_pulse_strip_i[i]);
-                Serial.println("--------------------");
+                
+                // Serial.println("--------------------");
+                // Serial.print("Strip number: ");
+                // Serial.println(i);
+                // Serial.print("New time for next pulse is: ");
+                // Serial.print(next_pulse_strip_i[i]);
+                // Serial.println("--------------------");
             }
-            // Using incrementIndex from utility_functions to increment our index
-            //incrementIndex(&index_pulse_strip_i[i],&total_steps1,&increment_by1);
         }
     }
     FastLED.show();
