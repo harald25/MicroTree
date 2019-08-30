@@ -23,6 +23,8 @@ https://www.youtube.com/watch?v=s0cHIyjrVMI
 https://www.youtube.com/watch?v=oguy4mDjrlk&t=1s
 
 ## Patch notes
+* 2019-08-30 - Program Fireworks
+  * Finished the first working version of Program Fireworks. I want to make some improvements to it, but for now it's going to stay like this
 * 2019-08-18 - LED order array
   * Added a new function in utility_functions.cpp: void generate_led_order_array(led_order order)  
     This function fills the array led_order_array[] with a LED order depending on the specified order.  
