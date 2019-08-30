@@ -11,7 +11,6 @@
 #define MIN_NUMBER_OF_SPARKS 20       // The minimum number of sparks from a firework explosion
 #define SPARK_FADE_TIME 5000          // Aount of miliseconds to stay in FADE stage
 
-extern CRGBPalette16 explosion_palette;
 extern CRGBPalette16 spark_palette;
 
 void fireworks();
@@ -36,8 +35,9 @@ class Firework
         float flare_position;                                   // Current position of the flare
         uint8_t strip_number;                                   // What strip this firework object is displayed on
         float gravity;                                          // Gravity makes things accelerate back down
+        //float64_t spark_deceleration;                               // Deceleration speed of the sparks
         uint8_t number_of_sparks;                               // Number of sparks from explosion
-        float spark_position[MAX_NUMBER_OF_SPARKS];          // Position of all the sparks
+        float spark_position[MAX_NUMBER_OF_SPARKS];             // Position of all the sparks
         float spark_velocity[MAX_NUMBER_OF_SPARKS];             // The current velocity of all the sparks
         uint8_t spark_gradient_index[MAX_NUMBER_OF_SPARKS];     // The index of the active_spark_palette this spark gets its color from
         bool spark_velocity_direction[MAX_NUMBER_OF_SPARKS];    // The direction of the spark
@@ -47,7 +47,7 @@ class Firework
         uint8_t flare_sat;                                      // Saturation of the flare
         uint8_t flare_val;                                      // Brightness of the flare
         uint8_t flare_tail_length;                              // How much to fade the tail of the flare each iteration (determines length of the "tail")
-        uint32_t spark_fade_end;                                     // Time to end FADE stage and proceed to next flare launch
+        uint32_t spark_fade_end;                                // Time to end FADE stage and proceed to next flare launch
         
     public:
         Firework(uint8_t strip_n);                              // The firework class constructor
