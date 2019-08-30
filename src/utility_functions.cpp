@@ -25,10 +25,13 @@ void updateLEDs()
           break;
         case VUMETER:
           vumeterUpdate();
+          break;
         case PULSE:
           pulseUpdate();
+          break;
         case FIREWORKS:
           fireworksUpdate();
+          break;
         default:
           break;
       }
