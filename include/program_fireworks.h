@@ -9,7 +9,7 @@
 
 #define MAX_NUMBER_OF_SPARKS 60       // The maximum number of sparks from a firework explosion
 #define MIN_NUMBER_OF_SPARKS 20       // The minimum number of sparks from a firework explosion
-#define SPARK_FADE_TIME 5000          // Aount of miliseconds to stay in FADE stage
+#define SPARK_FADE_TIME 5000          // Amount of miliseconds to stay in FADE stage
 
 extern CRGBPalette16 spark_palette;
 

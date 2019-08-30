@@ -156,6 +156,26 @@ void changeLEDProgram(OSCMessage &msg, int addrOffset )
       Serial.println("Activated the program VU-meter");
     }
   }
+
+  if (msg.fullMatch("/program/pulse"))
+  {
+    pulse();
+
+    if (debug_utility)
+    {
+      Serial.println("Activated the program pulse");
+    }
+  }
+
+  if (msg.fullMatch("/program/fireworks"))
+  {
+    fireworks();
+
+    if (debug_utility)
+    {
+      Serial.println("Activated the program fireworks");
+    }
+  }
 }
 
 void changeValue(OSCMessage &msg, int addrOffset )
