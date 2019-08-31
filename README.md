@@ -13,7 +13,7 @@ Some variables are global and all programs use them. Like hue1, hue2, saturation
 * Upload the code for the ESP to GIT
 * Add more cool programs and functionality!
   * I want a program the lets me mix other programs toghether like a DJ mixes songs together
-  * Fireworks effect
+  * ~~Fireworks effect~~
 * Think out better solutions for the physical connecting and setup of all the equipment
   * Better connection box. Preferably water proof
   * Easy power connection plugs on everything

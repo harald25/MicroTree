@@ -2,7 +2,10 @@
 
 int index_pulse_strip_i[NUM_STRIPS * STRIP_SPLIT];
 uint32_t next_pulse_strip_i[NUM_STRIPS * STRIP_SPLIT];
+uint8_t pulse_hue_strip_i[NUM_STRIPS * STRIP_SPLIT];
+uint8_t pulse_sat_strip_i[NUM_STRIPS * STRIP_SPLIT];
 uint16_t pulse_minimum_random_time;
+bool pulse_random_color;
 uint8_t pulse_lookuptable[] = {
     10,
     25,
@@ -270,13 +273,13 @@ pulse()
     saturation1 = 200;
     value1 = 0;
     update = true;
-    pulse_minimum_random_time = 5000;
-    increment_by1 = 2;
+    pulse_minimum_random_time = 1000;
+    increment_by1 = 1;
     total_steps1 = 255;
+    pulse_random_color = true;
 
     for (uint8_t i = 0; i < NUM_STRIPS * STRIP_SPLIT; i++) {
-        index_pulse_strip_i[i] = 0;
-        next_pulse_strip_i[i] = millis()+random16(10000)+pulse_minimum_random_time; 
+        preparePulse(i); 
     }
 }
 
@@ -292,23 +295,60 @@ void pulseUpdate()
             // Loops through all elements (LEDs) in the current virtual strip
             for (uint8_t x = 0; x < NUM_LEDS_PER_STRIP / STRIP_SPLIT; x++)
             {
-                leds[led_order_array[(i * (NUM_LEDS_PER_STRIP / STRIP_SPLIT)) + x]] = CHSV(hue1,saturation1,pulse_lookuptable[index_pulse_strip_i[i]]);
+                if (pulse_random_color) {
+                    leds[led_order_array[(i * (NUM_LEDS_PER_STRIP / STRIP_SPLIT)) + x]] = CHSV(pulse_hue_strip_i[i], pulse_sat_strip_i[i], pulse_lookuptable[index_pulse_strip_i[i]]);
+                }
+                else {
+                    leds[led_order_array[(i * (NUM_LEDS_PER_STRIP / STRIP_SPLIT)) + x]] = CHSV(hue1,saturation1,pulse_lookuptable[index_pulse_strip_i[i]]);
+                }
             }
             index_pulse_strip_i[i] ++;
             // Check if we reached the end of total_steps1. If we did a new time for the next pulse should be generated
             if (index_pulse_strip_i[i] >= total_steps1)
             {
-                next_pulse_strip_i[i] = millis()+random16(10000)+pulse_minimum_random_time;
-                index_pulse_strip_i[i] = 0;
-                
-                // Serial.println("--------------------");
-                // Serial.print("Strip number: ");
-                // Serial.println(i);
-                // Serial.print("New time for next pulse is: ");
-                // Serial.print(next_pulse_strip_i[i]);
-                // Serial.println("--------------------");
+                preparePulse(i);
             }
         }
     }
     FastLED.show();
+}
+
+void preparePulse(uint8_t strip_n)
+{
+    random16_add_entropy(analogRead(A13));
+    next_pulse_strip_i[strip_n] = millis() + random16(10000) + pulse_minimum_random_time;
+    index_pulse_strip_i[strip_n] = 0;
+    pulse_hue_strip_i[strip_n] = random8();
+    pulse_sat_strip_i[strip_n] = random8();
+}
+
+void pulseSettings(OSCMessage &msg, int addrOffset)
+{
+    if (msg.fullMatch("/pulse/page"))
+    {
+        sendPulseValuesToTouchosc();
+    }
+    else if (msg.fullMatch("/pulse/randomcolor"))
+    {
+        float value = msg.getFloat(0);
+        pulse_random_color = (bool)value;
+        OSCMsgSend("/pulse/randomcolor", (float)pulse_random_color);
+        Serial.print("Random colors: ");
+        Serial.println(value);
+    }
+    else if (msg.fullMatch("/pulse/minimumrandomtime"))
+    {
+        float value = msg.getFloat(0);
+        pulse_minimum_random_time = (uint16_t)value;
+    }
+    else {
+        Serial.println("Invalid OSC address");
+    }
+}
+
+void sendPulseValuesToTouchosc()
+{
+    OSCMsgSend("/variable/interval", (float)interval);
+    OSCMsgSend("/pulse/randomcolor", (float)pulse_random_color);
+    OSCMsgSend("/pulse/minimumrandomtime", (float)pulse_minimum_random_time);
 }

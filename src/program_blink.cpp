@@ -13,7 +13,6 @@ void blink()
     next_blink_LEDi[i] = millis()+(random16()%blink_random_time);
     leds[i] = 0;
   }
-  FastLED.show();
   total_steps1 = 255;
   interval = 10;
   active_palette = &blink_palette_bluetones;

@@ -86,8 +86,9 @@ void OSCMsgReceive()
     msgIN.route("/react", audioReactSettings);
     msgIN.route("/palette",setActivePalette);
     msgIN.route("/scanner",scannerSettings);
-    msgIN.route("/theater",scannerSettings);
+    msgIN.route("/theater",theaterSettings);
     msgIN.route("/preprogram",preprogramSettings);
+    msgIN.route("/pulse", pulseSettings);
   }
 
 }

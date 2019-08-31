@@ -7,5 +7,8 @@
 
 void pulse();
 void pulseUpdate();
+void pulseSettings(OSCMessage &msg, int addrOffset);
+void preparePulse(uint8_t strip_n);
+void sendPulseValuesToTouchosc();
 
 #endif

@@ -154,7 +154,6 @@ void changeLEDProgram(OSCMessage &msg, int addrOffset )
   if(msg.fullMatch("/program/vumeter"))
   {
     vumeter();
-
     if (debug_utility) {
       Serial.println("Activated the program VU-meter");
     }
@@ -163,9 +162,7 @@ void changeLEDProgram(OSCMessage &msg, int addrOffset )
   if (msg.fullMatch("/program/pulse"))
   {
     pulse();
-
-    if (debug_utility)
-    {
+    if (debug_utility) {
       Serial.println("Activated the program pulse");
     }
   }
@@ -173,9 +170,7 @@ void changeLEDProgram(OSCMessage &msg, int addrOffset )
   if (msg.fullMatch("/program/fireworks"))
   {
     fireworks();
-
-    if (debug_utility)
-    {
+    if (debug_utility) {
       Serial.println("Activated the program fireworks");
     }
   }

@@ -288,7 +288,7 @@ Firework::Firework(uint8_t strip_n)
 
 void Firework::prepare_for_launch()
 {
-    random16_add_entropy(random());
+    random16_add_entropy(analogRead(A13));
     active_spark_palette = spark_palette_array[random8(0, NUM_SPARK_PALETTES + 1)];
     current_stage = LAUNCH;
     flare_position = 0.0;

@@ -84,7 +84,7 @@ void sendTheaterValuesToTouchosc()
 
 void theaterSettings(OSCMessage &msg, int addrOffset)
 {
-    if (msg.fullMatch("/scanner/page"))
+    if (msg.fullMatch("/theater/page"))
     {
       sendTheaterValuesToTouchosc();
     }
