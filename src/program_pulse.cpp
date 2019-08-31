@@ -264,8 +264,7 @@ uint8_t pulse_lookuptable[] = {
     0
 };
 
-void
-pulse()
+void pulse()
 {
     active_program = PULSE;
     interval = 2;
