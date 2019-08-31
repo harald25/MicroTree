@@ -66,7 +66,7 @@ extern display_mode displaymode;
 extern direction dir;
 extern program active_program;
 extern int interval;
-extern int last_update;
+extern uint32_t last_update;
 extern int program_index1;
 extern int program_index2;
 extern int increment_by1;
@@ -80,6 +80,6 @@ extern uint8_t saturation2;
 extern uint8_t value2;
 extern uint8_t hue2;
 extern bool update;
-extern char osc_message_address[18];
+extern char osc_message_address[25];
 
 #endif

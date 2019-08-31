@@ -36,6 +36,7 @@ void vumeter()
   active_palette = &spectrum_classic;
   saturation1 = 255;
   value1 = 255;
+  allLedsOff();
 }
 
 void vumeterUpdate()

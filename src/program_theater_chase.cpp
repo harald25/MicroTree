@@ -22,6 +22,7 @@ void theaterChase()
   pixel_width = 10;
   update = true;
   increment_by1 = 1;
+  allLedsOff();
 }
 
 

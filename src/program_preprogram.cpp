@@ -5,21 +5,21 @@
 
 bool debug_preprogram = false;
 
-char preprogram_led_address[40];
+char preprogram_led_address[45];
 program active_preprogram;
-int last_preprogram_change;
-int preprogram_last_update = 0;
+uint32_t last_preprogram_change;
+uint32_t preprogram_last_update = 0;
 uint8_t preprogram_index = 0;
 bool preprogram_just_changed;
 bool preprogram_first_run;
-//Parameter order:                interval, sat1, sat2, val1, val2, hue1, hue2, pixel dist, pixel width,  tail length,  preprogram length,  active program
+//Parameter order:                interval, sat1,  sat2,  val1, val2, hue1,hue2, pixel dist,pixel width, tail length,  preprogram length,  active program
 SettingsObject settings_program1( 1,        255,   255,   175,  50,   1,   1,    25,        15,          10,           60,                 BLINK);
-SettingsObject settings_program2( 50,       255,   255,   175,  50,   1,   1,    5,         7,           50,           60,                 SCANNER);
-SettingsObject settings_program3( 25,       255,   255,   175,  50,   1,   200,  25,        5,           10,           60,                 PULSE);
+SettingsObject settings_program2( 30,       255,   255,   175,  150,  150, 1,    5,         7,           65,           60,                 SCANNER);
+SettingsObject settings_program3( 2,        255,   255,   175,  50,   1,   200,  25,        5,           10,           60,                 PULSE);
 SettingsObject settings_program4( 30,       255,   255,   175,  50,   1,   1,    15,        10,          20,           60,                 FIREWORKS);
 SettingsObject settings_program5( 25,       255,   255,   175,  50,   1,   1,    15,        5,           50,           60,                 BLINK);
 SettingsObject settings_program6( 25,       255,   255,   175,  50,   1,   200,  15,        5,           30,           60,                 SCANNER);
-SettingsObject settings_program7( 25,       255,   255,   175,  50,   1,   1,    5,         5,           60,           60,                 PULSE);
+SettingsObject settings_program7( 2,        255,   255,   175,  50,   1,   1,    5,         5,           60,           60,                 PULSE);
 SettingsObject settings_program8( 30,       255,   255,   175,  50,   1,   1,    5,         5,           50,           60,                 FIREWORKS);
 SettingsObject * settings_array[8] = {&settings_program1,&settings_program2,&settings_program3,&settings_program4,&settings_program5,&settings_program6,&settings_program7,&settings_program8};
 const uint8_t number_of_preprograms = 8; //This number must equal the length of $settings_array
@@ -27,7 +27,6 @@ const uint8_t number_of_preprograms = 8; //This number must equal the length of 
 
 void preprogram()
 {
-  last_preprogram_change = 0;
   preprogram_index = 0;
   preprogram_just_changed = 1;
   preprogram_first_run = 1;
@@ -35,6 +34,7 @@ void preprogram()
   active_program = PREPROGRAM;
   last_preprogram_change = millis();
   sendAllPreprogramValuesToTouchosc();
+  allLedsOff();
 }
 
 void preprogramUpdate()
@@ -81,6 +81,15 @@ void preprogramUpdate()
         break;
       case VUMETER:
         vumeter();
+        Serial.println("VUMETER preprogram activated");
+        break;
+      case PULSE:
+        pulse();
+        Serial.println("PULSE preprogram activated");
+        break;
+      case FIREWORKS:
+        fireworks();
+        Serial.println("FIREWORKS preprogram activated");
         break;
       default:
         break;
@@ -113,6 +122,12 @@ void preprogramUpdate()
         break;
       case VUMETER:
         vumeterUpdate();
+        break;
+      case PULSE:
+        pulseUpdate();
+        break;
+      case FIREWORKS:
+        fireworksUpdate();
         break;
       default:
         break;
@@ -293,47 +308,55 @@ void setPreprogramLedAddress(uint8_t index, program prog)
   if(prog == VUMETER) {
     strcat(preprogram_led_address,"/vumeter");
   }
+  if (prog == FIREWORKS)
+  {
+    strcat(preprogram_led_address, "/fireworks");
+  }
+  if (prog == PULSE)
+  {
+    strcat(preprogram_led_address, "/pulse");
+  }
 }
 void setPreprogramLed(uint8_t index, program prog)
 {
-  if (prog == THEATER_CHASE) {
-    setPreprogramLedAddress(index,THEATER_CHASE);
+  if (prog == PULSE) {
+    setPreprogramLedAddress(index,PULSE);
     OSCMsgSend(preprogram_led_address,1);
     setPreprogramLedAddress(index,BLINK);
     OSCMsgSend(preprogram_led_address,0);
     setPreprogramLedAddress(index,SCANNER);
     OSCMsgSend(preprogram_led_address,0);
-    setPreprogramLedAddress(index,VUMETER);
+    setPreprogramLedAddress(index,FIREWORKS);
     OSCMsgSend(preprogram_led_address,0);
   }
   if (prog == BLINK) {
-    setPreprogramLedAddress(index,THEATER_CHASE);
+    setPreprogramLedAddress(index,PULSE);
     OSCMsgSend(preprogram_led_address,0);
     setPreprogramLedAddress(index,BLINK);
     OSCMsgSend(preprogram_led_address,1);
     setPreprogramLedAddress(index,SCANNER);
     OSCMsgSend(preprogram_led_address,0);
-    setPreprogramLedAddress(index,VUMETER);
+    setPreprogramLedAddress(index,FIREWORKS);
     OSCMsgSend(preprogram_led_address,0);
   }
   if (prog == SCANNER) {
-    setPreprogramLedAddress(index,THEATER_CHASE);
+    setPreprogramLedAddress(index,PULSE);
     OSCMsgSend(preprogram_led_address,0);
     setPreprogramLedAddress(index,BLINK);
     OSCMsgSend(preprogram_led_address,0);
     setPreprogramLedAddress(index,SCANNER);
     OSCMsgSend(preprogram_led_address,1);
-    setPreprogramLedAddress(index,VUMETER);
+    setPreprogramLedAddress(index,FIREWORKS);
     OSCMsgSend(preprogram_led_address,0);
   }
-  if (prog == VUMETER) {
-    setPreprogramLedAddress(index,THEATER_CHASE);
+  if (prog == FIREWORKS) {
+    setPreprogramLedAddress(index,PULSE);
     OSCMsgSend(preprogram_led_address,0);
     setPreprogramLedAddress(index,BLINK);
     OSCMsgSend(preprogram_led_address,0);
     setPreprogramLedAddress(index,SCANNER);
     OSCMsgSend(preprogram_led_address,0);
-    setPreprogramLedAddress(index,VUMETER);
+    setPreprogramLedAddress(index, FIREWORKS);
     OSCMsgSend(preprogram_led_address,1);
   }
 }
@@ -385,14 +408,14 @@ void preprogramSettings(OSCMessage &msg, int addrOffset)
     switch (activeprogram)
     {
       case 0:
-        settings_array[preprogram_index]->setActiveProgram(THEATER_CHASE);
-        theaterChase();
+        settings_array[preprogram_index]->setActiveProgram(PULSE);
+        pulse();
         active_program = PREPROGRAM;
         active_preprogram = settings_array[preprogram_index]->getActivePreprogram();
         break;
       case 1:
-        settings_array[preprogram_index]->setActiveProgram(VUMETER);
-        vumeter();
+        settings_array[preprogram_index]->setActiveProgram(FIREWORKS);
+        fireworks();
         active_program = PREPROGRAM;
         active_preprogram = settings_array[preprogram_index]->getActivePreprogram();
         break;

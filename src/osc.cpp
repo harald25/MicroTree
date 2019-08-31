@@ -1,6 +1,6 @@
 #include "osc.h"
 
-bool debug_osc = false;
+bool debug_osc = 1;
 
 SLIPEncodedSerial SLIPSerial(Serial1);
 
@@ -33,7 +33,9 @@ void OSCMsgSend(float value)
 void OSCMsgSend(char * address, float value)
 {
   if (debug_osc) {
-    Serial.println(address);
+    Serial.print(address);
+    Serial.print( " with value: ");
+    Serial.println(value);
   }
   OSCMessage msgOUT(address);
   msgOUT.add(value);
@@ -57,8 +59,9 @@ void OSCMsgSend(char * address, float value)
 
 void OSCMsgReceive()
 {
+  //Serial.println("Entered OSCMsgReceive()");
 
-  OSCMessage msgIN;
+      OSCMessage msgIN;
   int size;
 
   static unsigned long microsTime = 0;

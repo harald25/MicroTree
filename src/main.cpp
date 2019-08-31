@@ -15,7 +15,7 @@ display_mode displaymode;
 direction dir;
 program active_program;
 int interval;
-int last_update = 0;
+uint32_t last_update = 0;
 int program_index1;
 int program_index2;
 int increment_by1;
@@ -28,8 +28,8 @@ uint8_t hue1;
 uint8_t saturation2;
 uint8_t value2;
 uint8_t hue2;
-bool update;
-char osc_message_address[18];
+bool update = true;
+char osc_message_address[25];
 float delta;
 float slope;
 
@@ -193,16 +193,14 @@ void setup() {
   AudioMemory(16);
 
   FastLED.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP);
-  //FastLED.addLeds<OCTOWS2811>(leds2, NUM_LEDS_PER_STRIP);
-  //FastLED.addLeds<OCTOWS2811>(leds3, NUM_LEDS_PER_STRIP);
   FastLED.setCorrection(COLOR_CORRECTION);
   FastLED.setBrightness(GLOBAL_BRIGHTNESS);
   generate_led_order_array(EVERY_SECOND_STRIP_REVERSED);
-  blink();
+  preprogram();
 }
 
 void loop() {
-    OSCMsgReceive();
-    audioReact((audio_reactive_setting)reactive_setting);
-    updateLEDs();
+  OSCMsgReceive();
+  audioReact((audio_reactive_setting)reactive_setting);
+  updateLEDs();
 }

@@ -1,7 +1,7 @@
 #include "audio_react.h"
 
 // If set to true, messages will be output to serial console
-const bool debug_audioreact = 1;
+const bool debug_audioreact = 0;
 
 // AUDIO OBJECTS
 // Audio objects are defined in main.h because they are shared between multiple programs

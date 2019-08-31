@@ -25,11 +25,9 @@ void blink()
   }
   total_steps1 = 255;
   interval = 10;
-  uint8_t random_num = random8(0,9);
-  active_palette = blink_palettes[random_num];
-  Serial.println(random_num);
-  //active_palette = &blink_palette_bhw1_14;
+  active_palette = blink_palettes[random8(0, 9)];
   update = true;
+  allLedsOff();
 }
 
 // Update the Blink pattern

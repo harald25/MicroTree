@@ -276,6 +276,7 @@ void pulse()
     increment_by1 = 1;
     total_steps1 = 255;
     pulse_random_color = true;
+    allLedsOff();
 
     for (uint8_t i = 0; i < NUM_STRIPS * STRIP_SPLIT; i++) {
         preparePulse(i); 

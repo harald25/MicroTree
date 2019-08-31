@@ -27,7 +27,7 @@ class Firework
             WAITING
         };
         stage current_stage;                                    // What stage of the firework are we currently at
-        int next_launch_time;                                   // Time for next flare launch
+        uint32_t next_launch_time;                                   // Time for next flare launch
         uint16_t next_launch_max_wait;                          // Maximum time to wait for next launch
         uint16_t next_launch_min_wait;                          // Minimum time to wait for next launch
         bool launched;                                          // Is the flare launched yet?

@@ -22,6 +22,7 @@ void scanner()
   increment_by1 = 1;
   dir = FORWARD;
   update = true;
+  allLedsOff();
 }
 
 void scannerUpdate()

@@ -2,6 +2,7 @@
 bool debug_utility = false;
 void updateLEDs()
 {
+  //Serial.println("Entered updateLEDs()");
   if(update)
   {
     if ((millis() - last_update) > interval) // time to update
@@ -30,7 +31,9 @@ void updateLEDs()
           pulseUpdate();
           break;
         case FIREWORKS:
+          //Serial.println("updateLEDs() running fireworksUpdate()");
           fireworksUpdate();
+          //Serial.println("updateLEDs() finished running fireworksUpdate()");
           break;
         default:
           break;

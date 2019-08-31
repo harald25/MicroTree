@@ -250,24 +250,26 @@ Firework *firework_array[NUM_STRIPS*STRIP_SPLIT] = {
 
 void fireworks()
 {
+    // Serial.println("void fireworks()");
     interval = 30;
     active_program = FIREWORKS;
-    FastLED.clear();
-    FastLED.show();
     for (uint8_t i = 0; i < NUM_STRIPS * STRIP_SPLIT; i++)
     {
         firework_array[i]->prepare_for_launch();
     }
     update = true;
+    allLedsOff();
 }
 
 void fireworksUpdate()
 {
+    // Serial.println("void fireworksUpdate() started");
     for (uint8_t i = 0; i < NUM_STRIPS*STRIP_SPLIT; i++)
     {
         firework_array[i]->update_firework();
     }
     FastLED.show();
+    // Serial.println("void fireworksUpdate() ended");
 }
 
 // Constructor
@@ -288,6 +290,7 @@ Firework::Firework(uint8_t strip_n)
 
 void Firework::prepare_for_launch()
 {
+    
     random16_add_entropy(analogRead(A13));
     active_spark_palette = spark_palette_array[random8(0, NUM_SPARK_PALETTES + 1)];
     current_stage = LAUNCH;
@@ -301,10 +304,13 @@ void Firework::prepare_for_launch()
     {
         leds[led_order_array[(strip_number * (NUM_LEDS_PER_STRIP / STRIP_SPLIT)) + i]] = CRGB::Black;
     }
+    // Serial.print("Prepare for launch on strip: ");
+    // Serial.println(strip_number);
 }
 
 void Firework::launch()
 {
+    
     // If the flare has slowed down to this value, we will go to the next stage: EXPLOSION!
     if (launched & (flare_velocity < 0.1))
     {
@@ -321,14 +327,17 @@ void Firework::launch()
         }
     }
     else
-    {   
+    {
+        
         if (!launched)
         {
             leds[led_order_array[(strip_number*(NUM_LEDS_PER_STRIP/STRIP_SPLIT))+(int)flare_position]] = CHSV(flare_hue,flare_sat,flare_val);
             launched = true;
+            
         }
         else
         {
+            
             // Fading the tail/trail of the flare. Only applying fadeToBlackBy() to the pixels with an index lower than (int)flare_position.
             // NB: Casting flare_position (which is a float) to int, will floor the value
             for (uint16_t i = 0; i < (int)flare_position; i++)
@@ -343,6 +352,8 @@ void Firework::launch()
         flare_position += flare_velocity;       // New position = current + velocity
         flare_velocity *= gravity; // New velocity = current * gravity (gravity is between 0 and 1, so velocity will decrease)
     }
+    // Serial.print("Launching: ");
+    // Serial.println(strip_number);
 }
 
 void Firework::explosion()
@@ -398,28 +409,34 @@ void Firework::fading()
     }
 }
 
-void Firework::set_palette(CRGBPalette16 *palette)
-{
-    // Code here
-}
-
 void Firework::update_firework()
 {
     if (current_stage == WAITING) {
+        // Serial.print("Current stage = WAITING on strip: ");
+        // Serial.println(strip_number);
+
         if (millis() >= next_launch_time) {
             prepare_for_launch();
         }
     }
     else if (current_stage == LAUNCH) {
+        // Serial.print("Current stage = LAUNCH on strip: ");
+        // Serial.println(strip_number);
         launch();
     }
     else if (current_stage == EXPLOSION) {
+        // Serial.print("Current stage = EXPLOSION on strip: ");
+        // Serial.println(strip_number);
         explosion();
     }
     else if (current_stage == FADING) {
+        // Serial.print("Current stage = FADING on strip: ");
+        // Serial.println(strip_number);
         fading();
     }
     else {
         Serial.println("You should not have ended up here!!");
     }
+    // Serial.print("update_firework() complete on strip: ");
+    // Serial.println(strip_number);
 }
