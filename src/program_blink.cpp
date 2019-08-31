@@ -2,6 +2,16 @@
 uint8_t index_LEDi[NUM_LEDS_PER_STRIP * NUM_STRIPS];
 uint32_t next_blink_LEDi[NUM_LEDS_PER_STRIP * NUM_STRIPS];
 uint32_t blink_random_time;
+CRGBPalette16 * blink_palettes [8] = {
+  &blink_palette_bhw1_14,
+  &blink_palette_bhw2_22,
+  &blink_palette_bluetones,
+  &blink_palette_es_vintage,
+  &blink_palette_greeny,
+  &blink_palette_orange,
+  &blink_palette_purple,
+  &blink_palette_purplefly
+};
 
 
 void blink()
@@ -15,7 +25,10 @@ void blink()
   }
   total_steps1 = 255;
   interval = 10;
-  active_palette = &blink_palette_bluetones;
+  uint8_t random_num = random8(0,9);
+  active_palette = blink_palettes[random_num];
+  Serial.println(random_num);
+  //active_palette = &blink_palette_bhw1_14;
   update = true;
 }
 

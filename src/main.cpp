@@ -89,6 +89,75 @@ DEFINE_GRADIENT_PALETTE( spectrum_candy_gp ) {
 200,   0,    162,  255,    //Pastel Blue
 255,   0,    162,  255};    //Pastel Blue
 
+// Gradient palette "es_vintage_01_gp", originally from
+// http://soliton.vm.bytemark.co.uk/pub/cpt-city/es/vintage/tn/es_vintage_01.png.index.html
+// converted for FastLED with gammas (2.6, 2.2, 2.5)
+// Size: 32 bytes of program space.
+
+DEFINE_GRADIENT_PALETTE(es_vintage_01_gp){
+0, 0, 0, 0,
+5, 4, 1, 1,
+51, 16, 0, 1,
+76, 97, 104, 3,
+101, 255, 131, 19,
+127, 67, 9, 4,
+153, 16, 0, 1,
+229, 4, 1, 1,
+250, 4, 1, 1,
+255, 0, 0, 0};
+
+// Gradient palette "purplefly_gp", originally from
+// http://soliton.vm.bytemark.co.uk/pub/cpt-city/rc/tn/purplefly.png.index.html
+// converted for FastLED with gammas (2.6, 2.2, 2.5)
+// Size: 16 bytes of program space.
+
+DEFINE_GRADIENT_PALETTE(purplefly_gp){
+0, 0, 0, 0,
+63, 239, 0, 122,
+191, 252, 255, 78,
+255, 0, 0, 0};
+
+// Gradient palette "bhw1_greeny_gp", originally from
+// http://soliton.vm.bytemark.co.uk/pub/cpt-city/bhw/bhw1/tn/bhw1_greeny.png.index.html
+// converted for FastLED with gammas (2.6, 2.2, 2.5)
+// Size: 20 bytes of program space.
+
+DEFINE_GRADIENT_PALETTE(bhw1_greeny_gp){
+0, 0, 0, 0,
+39, 7, 55, 8,
+99, 42, 255, 45,
+153, 7, 55, 8,
+255, 0, 0, 0};
+
+// Gradient palette "bhw1_14_gp", originally from
+// http://soliton.vm.bytemark.co.uk/pub/cpt-city/bhw/bhw1/tn/bhw1_14.png.index.html
+// converted for FastLED with gammas (2.6, 2.2, 2.5)
+// Size: 36 bytes of program space.
+
+DEFINE_GRADIENT_PALETTE(bhw1_14_gp){
+0, 0, 0, 0,
+12, 1, 1, 3,
+53, 8, 1, 22,
+80, 4, 6, 89,
+119, 2, 25, 216,
+145, 7, 10, 99,
+186, 15, 2, 31,
+233, 2, 1, 5,
+255, 0, 0, 0};
+
+
+// Gradient palette "bhw2_22_gp", originally from
+// http://soliton.vm.bytemark.co.uk/pub/cpt-city/bhw/bhw2/tn/bhw2_22.png.index.html
+// converted for FastLED with gammas (2.6, 2.2, 2.5)
+// Size: 20 bytes of program space.
+
+DEFINE_GRADIENT_PALETTE(bhw2_22_gp){
+0, 0, 0, 0,
+99, 227, 1, 1,
+130, 249, 199, 95,
+155, 227, 1, 1,
+255, 0, 0, 0};
+
 CRGBPalette16 spectrum_candy = spectrum_candy_gp;
 CRGBPalette16 spectrum_pastel = spectrum_pastel_gp;
 CRGBPalette16 spectrum_warm = spectrum_warm_gp;
@@ -97,6 +166,13 @@ CRGBPalette16 spectrum_classic = spectrum_classic_gp;
 CRGBPalette16 blink_palette_purple = blink_purple_gp;
 CRGBPalette16 blink_palette_orange = blink_orange_gp;
 CRGBPalette16 blink_palette_bluetones = blink_bluetones_gp;
+
+CRGBPalette16 blink_palette_es_vintage = es_vintage_01_gp;
+CRGBPalette16 blink_palette_purplefly = purplefly_gp;
+CRGBPalette16 blink_palette_greeny = bhw1_greeny_gp;
+CRGBPalette16 blink_palette_bhw1_14 = bhw1_14_gp;
+CRGBPalette16 blink_palette_bhw2_22 = bhw2_22_gp;
+
 CRGBPalette16 heatcolorPalette = heatmap_gp;
 
 CRGBPalette16 * active_palette;
@@ -122,7 +198,7 @@ void setup() {
   FastLED.setCorrection(COLOR_CORRECTION);
   FastLED.setBrightness(GLOBAL_BRIGHTNESS);
   generate_led_order_array(EVERY_SECOND_STRIP_REVERSED);
-  pulse();
+  blink();
 }
 
 void loop() {

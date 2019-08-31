@@ -12,15 +12,15 @@ int preprogram_last_update = 0;
 uint8_t preprogram_index = 0;
 bool preprogram_just_changed;
 bool preprogram_first_run;
-//Parameter order:                interval, sat1, sat2, val1, val2, hue1, hue2, pixel dist, pixel width,  tail length,  preprogram length,  active progrma
+//Parameter order:                interval, sat1, sat2, val1, val2, hue1, hue2, pixel dist, pixel width,  tail length,  preprogram length,  active program
 SettingsObject settings_program1( 1,        255,   255,   175,  50,   1,   1,    25,        15,          10,           60,                 BLINK);
 SettingsObject settings_program2( 50,       255,   255,   175,  50,   1,   1,    5,         7,           50,           60,                 SCANNER);
-SettingsObject settings_program3( 25,       255,   255,   175,  50,   1,   200,  25,        5,           10,           60,                 THEATER_CHASE);
-SettingsObject settings_program4( 25,       255,   255,   175,  50,   1,   1,    15,        10,          20,           60,                 VUMETER);
-SettingsObject settings_program5( 25,       255,   255,   175,  50,   1,   1,    15,        5,           50,           60,                 SCANNER);
-SettingsObject settings_program6( 25,       255,   255,   175,  50,   1,   200,  15,        5,           30,           60,                 THEATER_CHASE);
-SettingsObject settings_program7( 25,       255,   255,   175,  50,   1,   1,    5,         5,           60,           60,                 BLINK);
-SettingsObject settings_program8( 25,       255,   255,   175,  50,   1,   1,    5,         5,           50,           60,                 SCANNER);
+SettingsObject settings_program3( 25,       255,   255,   175,  50,   1,   200,  25,        5,           10,           60,                 PULSE);
+SettingsObject settings_program4( 30,       255,   255,   175,  50,   1,   1,    15,        10,          20,           60,                 FIREWORKS);
+SettingsObject settings_program5( 25,       255,   255,   175,  50,   1,   1,    15,        5,           50,           60,                 BLINK);
+SettingsObject settings_program6( 25,       255,   255,   175,  50,   1,   200,  15,        5,           30,           60,                 SCANNER);
+SettingsObject settings_program7( 25,       255,   255,   175,  50,   1,   1,    5,         5,           60,           60,                 PULSE);
+SettingsObject settings_program8( 30,       255,   255,   175,  50,   1,   1,    5,         5,           50,           60,                 FIREWORKS);
 SettingsObject * settings_array[8] = {&settings_program1,&settings_program2,&settings_program3,&settings_program4,&settings_program5,&settings_program6,&settings_program7,&settings_program8};
 const uint8_t number_of_preprograms = 8; //This number must equal the length of $settings_array
 

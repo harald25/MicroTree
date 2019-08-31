@@ -112,7 +112,31 @@ void setActivePalette(OSCMessage &msg, int addrOffset) {
     active_palette = &blink_palette_purple;
     spec_mode = GRADIENT;
   }
-
+  if (msg.fullMatch("/palette/vintage"))
+  {
+    active_palette = &blink_palette_es_vintage;
+    spec_mode = GRADIENT;
+  }
+  if (msg.fullMatch("/palette/purplefly"))
+  {
+    active_palette = &blink_palette_purplefly;
+    spec_mode = GRADIENT;
+  }
+  if (msg.fullMatch("/palette/greeny"))
+  {
+    active_palette = &blink_palette_greeny;
+    spec_mode = GRADIENT;
+  }
+  if (msg.fullMatch("/palette/bhw1_14"))
+  {
+    active_palette = &blink_palette_bhw1_14;
+    spec_mode = GRADIENT;
+  }
+  if (msg.fullMatch("/palette/bhw2_22"))
+  {
+    active_palette = &blink_palette_bhw2_22;
+    spec_mode = GRADIENT;
+  }
 }
 
 void changeLEDProgram(OSCMessage &msg, int addrOffset )
