@@ -8,7 +8,7 @@ Some variables are global and all programs use them. Like hue1, hue2, saturation
 ## Wiring diagram
 This wiring diagram is from my last installation of this project. I used 2x 100A, 5V PSUs, 16x 5m WS2812b LED strips (150 pixels pr strip), Teensy 3.6 with OCTOWS adaptor, and Wemos D1 mini (ESP8266).
 
-![Wiring diagram](https://github.com/harald25/MicroTree/tree/master/images/LEDTree_flowcamp-2019.png)
+![Wiring diagram](https://github.com/harald25/MicroTree/raw/master/images/LEDTree_flowcamp-2019.png)
 
 
 ## Future goals
