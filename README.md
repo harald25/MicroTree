@@ -28,6 +28,8 @@ https://www.youtube.com/watch?v=s0cHIyjrVMI
 https://www.youtube.com/watch?v=oguy4mDjrlk&t=1s
 
 ## Patch notes
+* 2019-09-13 - Wiring diagram
+  * Added wiring diagram from my latest installation of the project
 * 2019-08-30 - Program Fireworks
   * Finished the first working version of Program Fireworks. I want to make some improvements to it, but for now it's going to stay like this
 * 2019-08-18 - LED order array
