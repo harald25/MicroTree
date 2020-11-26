@@ -5,6 +5,14 @@ I am trying to structure the project so that main.cpp, utility_function.cpp, osc
 Each program should have all the necessary function to manipulate it's program specific parameters in the same file as the program. When I add a new program I also add a new "enum program" in main.h, and a new case for the program in the updateLEDs function in utility_functions.cpp.
 Some variables are global and all programs use them. Like hue1, hue2, saturation1, saturation2, value1, value2, and some others. The idea is that I only need to define the funtions for manipulating them once, OSC messages can activate these functions, and when I add a new program I often don't have to add a lot of controls in TouchOSC because they are already there.
 
+## Getting Started
+
+1. Install the [Teensy Loader](https://www.pjrc.com/teensy/loader.html)
+2. Install [VS Code](https://code.visualstudio.com/)
+3. Install the **PlatformIO IDE** plugin in VS Code
+4. In the PIO Home tab click Projects -> Add Existing and then navigate to this folder
+5. Click the PlatformIO tab (Alien Icon) on the far left of the vscode window. From here you can build and upload to the Teensy.
+
 ## Wiring diagram
 This wiring diagram is from my last installation of this project. I used 2x 100A, 5V PSUs, 16x 5m WS2812b LED strips (150 pixels pr strip), Teensy 3.6 with OCTOWS adaptor, and Wemos D1 mini (ESP8266).
 
