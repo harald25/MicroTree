@@ -196,7 +196,10 @@ void setup() {
   FastLED.setCorrection(COLOR_CORRECTION);
   FastLED.setBrightness(GLOBAL_BRIGHTNESS);
   generate_led_order_array(EVERY_SECOND_STRIP_REVERSED);
+
   preprogram();
+  // blink();
+  // theaterChase();
 }
 
 void loop() {
