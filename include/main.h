@@ -47,9 +47,45 @@ extern CRGBPalette16 spectrum_warm;
 extern CRGBPalette16 spectrum_classic;
 extern CRGBPalette16 * active_palette;
 
+// Teensy Versions
+// ==================================================================
+
+#if defined(__arm__) && defined(CORE_TEENSY)
+  #define PROCESSOR_TEENSY_3_X	1		// run on Paul Stoffregen's ARM Cortex M4 based teensy 3.0/teensy 3.1
+
+  #if defined(__MK20DX128__)
+    #define PROCESSOR_TEENSY_3_0	1
+
+  #elif defined(__MK20DX256__)
+    #define PROCESSOR_TEENSY_3_1	1
+    #define PROCESSOR_TEENSY_3_2	1
+
+  #elif defined(__MKL26Z64__)
+    #define PROCESSOR_TEENSY_LC	1
+
+  #elif defined(__MK64FX512__)
+    #define PROCESSOR_TEENSY_3_5	1
+
+  #elif defined(__MK66FX1M0__)
+    #define PROCESSOR_TEENSY_3_6	1
+
+  #else
+    #error "Unknown Teensy, fix Meissner_Config.h"
+  #endif
+#endif
+
+
+// User Configurable Values
+// ==================================================================
+
 #define STRIP_SPLIT 2   //Define how many "virtual strips" each of the outputs should be split into
                         //NUM_LEDS_PER_STRIP must be dividable by this number
-#define NUM_LEDS_PER_STRIP 300
+#ifdef PROCESSOR_TEENSY_3_1
+  #define NUM_LEDS_PER_STRIP 150
+#else
+  #define NUM_LEDS_PER_STRIP 300
+#endif
+
 #define NUM_STRIPS 8
 #define COLOR_CORRECTION TypicalSMD5050
 #define GLOBAL_BRIGHTNESS 150

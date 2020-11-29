@@ -33,6 +33,7 @@ void blink()
 // Update the Blink pattern
 void blinkUpdate()
 {
+  // Serial.println("Entered blinkUpdate()");
   //Runs through each LED
   for (int i = 0; i < NUM_STRIPS*NUM_LEDS_PER_STRIP; i++)
   {
@@ -51,5 +52,7 @@ void blinkUpdate()
       }
     }
   }
+  // Serial.println("Before FastLED.show()");
   FastLED.show();
+  // Serial.println("Exited blinkUpdate()");
 }

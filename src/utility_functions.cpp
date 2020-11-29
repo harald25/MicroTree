@@ -2,7 +2,7 @@
 bool debug_utility = false;
 void updateLEDs()
 {
-  //Serial.println("Entered updateLEDs()");
+  // Serial.println("Entered updateLEDs()");
   if(update)
   {
     if ((millis() - last_update) > interval) // time to update
@@ -40,6 +40,7 @@ void updateLEDs()
       }
     }
   }
+  // Serial.println("Exited updateLEDs()");
 }
 
 // Increment the Index and reset at the end
