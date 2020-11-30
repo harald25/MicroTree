@@ -14,10 +14,17 @@ Some variables are global and all programs use them. Like hue1, hue2, saturation
 5. Click the PlatformIO tab (Alien Icon) on the far left of the vscode window. From here you can build and upload to the Teensy.
 
 ## Wiring diagram
+
 This wiring diagram is from my last installation of this project. I used 2x 100A, 5V PSUs, 16x 5m WS2812b LED strips (150 pixels pr strip), Teensy 3.6 with OCTOWS adaptor, and Wemos D1 mini (ESP8266).
 
 ![Wiring diagram](https://github.com/harald25/MicroTree/raw/master/images/LEDTree_flowcamp-2019.png)
 
+### Cat 5 Wiring
+
+The WS2812B LED strips are controlled via Cat 5 cables connected to the [Octo28 Adapter](https://www.pjrc.com/store/octo28_adaptor.html). Each Cat 5 can connect to up to 4 LED strips - using one twisted pair per LED strip:
+
+- the solid color is signal
+- the striped color & white is ground
 
 ## Future goals
 * Document my code better. So other people can understand it, use it, and contribute to it
