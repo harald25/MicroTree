@@ -31,6 +31,8 @@ The ESP8266 code can be found here: https://github.com/harald25/esp_slipserial
 ### Teensy to ESP8266 Wiring
 - Teensy Pin 0 to ESP8266 TX
 - Teensy Pin 1 to ESP8266 RX
+- 5V to ESP8266
+- Gnd to ESP8266
 
 ## Adding audio input
 
